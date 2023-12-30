@@ -1,28 +1,19 @@
 package srinageswari.programmedhousehold.dto.recipeingredient;
 
-import srinageswari.programmedhousehold.common.enums.Unit;
-import srinageswari.programmedhousehold.model.Item;
-import srinageswari.programmedhousehold.model.Recipe;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import srinageswari.programmedhousehold.model.RecipeIngredient;
 
 /**
  * @author smanickavasagam
  *     <p>Mapper for RecipeIngredientRequest
  */
-public class RecipeIngredientMapper {
+@Mapper(componentModel = "spring")
+public interface RecipeIngredientMapper {
 
-  private RecipeIngredientMapper() {}
+  RecipeIngredientMapper MAPPER = Mappers.getMapper(RecipeIngredientMapper.class);
 
-  /**
-   * Maps RecipeIngredientRequest fields to a new RecipeIngredient
-   *
-   * @param recipe
-   * @param item
-   * @param unit
-   * @param quantity
-   * @return RecipeIngredient model
-   */
-  public static RecipeIngredient mapToEntity(Recipe recipe, Item item, Unit unit, int quantity) {
-    return new RecipeIngredient(recipe, item, unit, quantity);
-  }
+  RecipeIngredient toEntity(RecipeIngredientRequestDTO dto);
+
+  RecipeIngredientRequestDTO toDto(RecipeIngredient entity);
 }

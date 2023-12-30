@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import srinageswari.programmedhousehold.model.Category;
-import srinageswari.programmedhousehold.model.Item;
 
 /**
  * @author smanickavasagam
@@ -22,7 +21,7 @@ public interface CategoryMapper {
   CategoryRequestDTO toDto(Category entity);
 
   @AfterMapping
-  default void capitalizeFully(@MappingTarget Item entity, CategoryRequestDTO dto) {
+  default void capitalizeFully(@MappingTarget Category entity, CategoryRequestDTO dto) {
     entity.setName(WordUtils.capitalizeFully(dto.getName()));
   }
 }

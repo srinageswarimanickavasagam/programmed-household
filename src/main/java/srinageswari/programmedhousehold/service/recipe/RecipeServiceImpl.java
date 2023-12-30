@@ -105,7 +105,8 @@ public class RecipeServiceImpl implements IRecipeService {
   public CommandResponseDTO create(RecipeRequestDTO request) {
     final Recipe recipe = recipeMapper.toEntity(request);
     recipe.getRecipeIngredients().clear();
-    request.getRecipeIngredients().stream()
+    request
+        .getRecipeIngredients()
         .forEach(
             recipeIngredient -> {
               final Item item;
