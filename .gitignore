@@ -1,0 +1,111 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+.classpath
+.project
+.settings/
+
+# BEGIN ideaJ files
+.idea
+.iml
+# END ideaJ files
+
+# BEGIN Gradle temp files
+.gradle
+# END Gradle temp files
+war.gradle
+
+target
+
+# BEGIN Gradle build folder
+build
+out
+# END Gradle build folder
+*.DAT
+*.DMP
+*.ID
+*.IND
+*.Inx
+*.MAP
+*.a
+*.bak
+*.bar
+*.btw
+*.class
+*.contrib
+*.crt
+*.dat
+*.db
+*.depot
+*.dll
+*.dmp
+*.doc
+*.docx
+*.dox
+*.ear
+*.exe
+*.gz
+*.id
+*.ind
+*.jar
+*.jasper
+*.jude
+*.keep
+*.keep.*
+*.lib
+*.lic
+*.lnk
+*.log
+*.map
+*.mkelem
+*.mmc
+*.mms
+*.mtt
+*.o
+*.obj
+*.orig
+*.pdb
+*.pdf
+*.pot
+*.ppt
+*.pptx
+*.ps
+*.pst
+*.rar
+*.rej
+*.rpm
+*.scc
+*.so
+*.sqlite
+*.swp
+*.tab
+*.tar
+*.tgz
+*.thmx
+*.vsd
+*.war
+*.wzip
+*.xls
+*.xlsm
+*.xlsx
+*.zip
+*.cmd
+*/.svn/*
+*toDelete*
+*todelete*
+.DS_Store
+.copyarea.db
+Thumbs.db
+/bin/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*

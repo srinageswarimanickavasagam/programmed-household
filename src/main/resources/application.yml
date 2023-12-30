@@ -1,0 +1,78 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: programmed-household
+
+server:
+  port: 5000
+  servlet:
+    session:
+      timeout: 60m
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/recipedb
+    username: ${PH_DB_USERNAME}
+    password: ${PH_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+    ddl-auto: create
+    show-sql: true
+  security:
+    ignored:
+      oauth2:
+        client:
+          registration:
+            google:
+              clientId: "${GOOGLE_CLIENT_ID}"
+              clientSecret: "${GOOGLE_CLIENT_SECRET}"
+              callbackUrl: http://localhost:5000/login/oauth2/code/google
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+app:
+  security:
+    enabled: false
+  frontend:
+    url: http://localhost:5000
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+datasource:
+  url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+  username: ${RDS_USERNAME}
+  password: ${RDS_PASSWORD}
+  driver-class-name: com.mysql.cj.jdbc.Driver
+jpa:
+  database-platform: org.hibernate.dialect.MySQL8Dialect
+  hibernate:
+  ddl-auto: create
+  show-sql: true
+security:
+  oauth2:
+    client:
+      registration:
+        google:
+          clientId: "${GOOGLE_CLIENT_ID}"
+          clientSecret: "${GOOGLE_CLIENT_SECRET}"
+          callbackUrl: http://localhost:5000/login/oauth2/code/google
+app:
+  security:
+    enabled: true
+  frontend:
+    url: http://localhost:5000
