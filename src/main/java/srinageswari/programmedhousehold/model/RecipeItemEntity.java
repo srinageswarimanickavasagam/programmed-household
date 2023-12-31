@@ -5,7 +5,6 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.common.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -14,46 +13,46 @@ import srinageswari.programmedhousehold.common.enums.Unit;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "recipe_ingredient")
-public class RecipeIngredient {
+@Table(name = "recipe_item")
+public class RecipeItemEntity {
 
-  @EmbeddedId private RecipeIngredientId recipeIngredientId;
+  @EmbeddedId private RecipeItemId recipeItemId;
 
   @Column(nullable = false)
-  private int ingredientQty;
+  private int itemQty;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @MapsId("recipeId")
   @JoinColumn(name = "recipe_id", referencedColumnName = "id")
-  private Recipe recipe;
+  private RecipeEntity recipe;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @MapsId("itemId")
   @JoinColumn(name = "item_id", referencedColumnName = "id")
-  private Item item;
+  private ItemEntity item;
 
   @Column(nullable = false)
   @Enumerated(value = EnumType.STRING)
   private Unit unit;
 
-  public RecipeIngredient(Recipe recipe, Item item, Unit unit, int ingredientQty) {
-    this.recipeIngredientId = new RecipeIngredientId(recipe.getId(), item.getId());
+  public RecipeItemEntity(RecipeEntity recipe, ItemEntity item, Unit unit, int itemQty) {
+    this.recipeItemId = new RecipeItemId(recipe.getId(), item.getId());
     this.recipe = recipe;
     this.item = item;
     this.unit = unit;
-    this.ingredientQty = ingredientQty;
+    this.itemQty = itemQty;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    RecipeIngredient that = (RecipeIngredient) o;
-    return recipeIngredientId.equals(that.recipeIngredientId);
+    RecipeItemEntity that = (RecipeItemEntity) o;
+    return recipeItemId.equals(that.recipeItemId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(recipeIngredientId);
+    return Objects.hash(recipeItemId);
   }
 }

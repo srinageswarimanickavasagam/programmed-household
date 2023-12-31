@@ -1,4 +1,4 @@
-package srinageswari.programmedhousehold.common.enums;
+package srinageswari.programmedhousehold.common.search;
 
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;

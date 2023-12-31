@@ -3,9 +3,9 @@ package srinageswari.programmedhousehold.dto.category;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.common.enums.Day;
-import srinageswari.programmedhousehold.common.enums.Difficulty;
-import srinageswari.programmedhousehold.common.enums.Meal;
+import srinageswari.programmedhousehold.model.Day;
+import srinageswari.programmedhousehold.model.Difficulty;
+import srinageswari.programmedhousehold.model.Meal;
 
 /**
  * @author smanickavasagam

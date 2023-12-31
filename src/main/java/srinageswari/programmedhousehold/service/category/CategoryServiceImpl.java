@@ -14,7 +14,7 @@ import srinageswari.programmedhousehold.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.dto.category.CategoryMapper;
 import srinageswari.programmedhousehold.dto.category.CategoryRequestDTO;
 import srinageswari.programmedhousehold.dto.category.CategoryResponseDTO;
-import srinageswari.programmedhousehold.model.Category;
+import srinageswari.programmedhousehold.model.CategoryEntity;
 import srinageswari.programmedhousehold.repository.CategoryRepository;
 
 /**
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements ICategoryService {
    */
   @Transactional(readOnly = true)
   public Page<CategoryResponseDTO> findAll(SearchRequestDTO request) {
-    final SearchSpecification<Category> specification = new SearchSpecification<>(request);
+    final SearchSpecification<CategoryEntity> specification = new SearchSpecification<>(request);
     final Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
     final Page<CategoryResponseDTO> categories =
         categoryRepository.findAll(specification, pageable).map(CategoryResponseDTO::new);
@@ -74,9 +74,9 @@ public class CategoryServiceImpl implements ICategoryService {
    */
   @Transactional
   public CommandResponseDTO create(CategoryRequestDTO request) {
-    final Category category = categoryMapper.toEntity(request);
-    categoryRepository.save(category);
-    return CommandResponseDTO.builder().id(category.getCategoryId()).build();
+    final CategoryEntity categoryEntity = categoryMapper.toEntity(request);
+    categoryRepository.save(categoryEntity);
+    return CommandResponseDTO.builder().id(categoryEntity.getCategoryId()).build();
   }
 
   /**
@@ -86,9 +86,8 @@ public class CategoryServiceImpl implements ICategoryService {
    * @return
    */
   @Transactional
-  // for adding/removing ingredients for a current recipe, use RecipeIngredientService methods
   public CommandResponseDTO update(CategoryRequestDTO request) {
-    final Category category =
+    final CategoryEntity categoryEntity =
         categoryRepository
             .findById(request.getCategoryId())
             .orElseThrow(
@@ -96,13 +95,13 @@ public class CategoryServiceImpl implements ICategoryService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    category.setName(request.getName());
-    category.setMeal(request.getMeal());
-    category.setDay(request.getDay());
-    category.setDifficulty(request.getDifficulty());
-    category.setSidedish(request.isSidedish());
-    categoryRepository.save(category);
-    return CommandResponseDTO.builder().id(category.getCategoryId()).build();
+    categoryEntity.setName(request.getName());
+    categoryEntity.setMeal(request.getMeal());
+    categoryEntity.setDay(request.getDay());
+    categoryEntity.setDifficulty(request.getDifficulty());
+    categoryEntity.setSidedish(request.isSidedish());
+    categoryRepository.save(categoryEntity);
+    return CommandResponseDTO.builder().id(categoryEntity.getCategoryId()).build();
   }
 
   /**
@@ -112,7 +111,7 @@ public class CategoryServiceImpl implements ICategoryService {
    * @return
    */
   public void deleteById(Long id) {
-    final Category category =
+    final CategoryEntity categoryEntity =
         categoryRepository
             .findById(id)
             .orElseThrow(
@@ -120,6 +119,6 @@ public class CategoryServiceImpl implements ICategoryService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    categoryRepository.delete(category);
+    categoryRepository.delete(categoryEntity);
   }
 }

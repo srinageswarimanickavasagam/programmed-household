@@ -8,7 +8,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.common.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -18,7 +17,7 @@ import srinageswari.programmedhousehold.common.enums.Unit;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
-public class Item {
+public class ItemEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +31,9 @@ public class Item {
 
   @ManyToOne
   @JoinColumn(name = "type_id")
-  Itemtype itemtype;
+  ItemtypeEntity itemtype;
 
-  private int stockQty;
+  private int itemStockQty;
 
   private float amount;
 
@@ -43,32 +42,33 @@ public class Item {
   private boolean isEssential;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-  private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+  private Set<RecipeItemEntity> recipeItems = new HashSet<>();
 
-  public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
-    recipeIngredients.add(recipeIngredient);
-    recipeIngredient.setItem(this);
+  public void addRecipeItem(RecipeItemEntity recipeItemEntity) {
+    recipeItems.add(recipeItemEntity);
+    recipeItemEntity.setItem(this);
   }
 
-  public void removeRecipeIngredient(RecipeIngredient recipeIngredient) {
-    recipeIngredients.remove(recipeIngredient);
-    recipeIngredient.setItem(null);
+  public void removeRecipeItem(RecipeItemEntity recipeItemEntity) {
+    recipeItems.remove(recipeItemEntity);
+    recipeItemEntity.setItem(null);
   }
 
-  public Item(Long id) {
+  public ItemEntity(Long id) {
     this.id = id;
   }
 
-  public Item(Long id, String name) {
+  public ItemEntity(Long id, String name, ItemtypeEntity itemtype) {
     this.id = id;
     this.name = name;
+    this.itemtype = itemtype;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Item that = (Item) o;
+    ItemEntity that = (ItemEntity) o;
     return name.equals(that.name);
   }
 

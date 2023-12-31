@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import srinageswari.programmedhousehold.dto.recipe.RecipeRequestDTO;
-import srinageswari.programmedhousehold.dto.recipeingredient.RecipeIngredientRequestDTO;
+import srinageswari.programmedhousehold.dto.recipeitem.RecipeItemRequestDTO;
 
 /**
  * @author smanickavasagam
@@ -24,9 +24,7 @@ public class ItemBusinessValidator implements ConstraintValidator<ValidItem, Rec
   @Override
   public boolean isValid(RecipeRequestDTO request, ConstraintValidatorContext context) {
     return areAllUnique(
-        request.getRecipeIngredients().stream()
-            .map(RecipeIngredientRequestDTO::getIngredientName)
-            .toList());
+        request.getRecipeItemRequests().stream().map(RecipeItemRequestDTO::getItemName).toList());
   }
 
   /**

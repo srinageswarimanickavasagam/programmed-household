@@ -8,10 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 import srinageswari.programmedhousehold.controller.AbstractContainerBaseTest;
-import srinageswari.programmedhousehold.model.AppUser;
-import srinageswari.programmedhousehold.model.Category;
-import srinageswari.programmedhousehold.model.Item;
-import srinageswari.programmedhousehold.model.Itemtype;
+import srinageswari.programmedhousehold.model.AppUserEntity;
+import srinageswari.programmedhousehold.model.CategoryEntity;
+import srinageswari.programmedhousehold.model.ItemEntity;
+import srinageswari.programmedhousehold.model.ItemtypeEntity;
 import srinageswari.programmedhousehold.repository.*;
 
 @SpringBootTest
@@ -20,7 +20,7 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
 
   @Autowired ScheduleRepository scheduleRepository;
 
-  @Autowired RecipeIngredientRepository recipeIngredientRepository;
+  @Autowired RecipeItemRepository recipeItemRepository;
 
   @Autowired RecipeRepository recipeRepository;
 
@@ -35,39 +35,39 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
   private final String filePath = "data/integrationtest/";
 
   public void setupCategoryData(String fileName) throws IOException {
-    Category category = jsonToObjectConverter(fileName, Category.class);
+    CategoryEntity categoryEntity = jsonToObjectConverter(fileName, CategoryEntity.class);
 
     if (!TestTransaction.isActive()) TestTransaction.start();
-    categoryRepository.save(category);
+    categoryRepository.save(categoryEntity);
     TestTransaction.flagForCommit();
     TestTransaction.end();
   }
 
-  public AppUser setupAppUserData(String fileName) throws IOException {
-    AppUser appUser = jsonToObjectConverter(fileName, AppUser.class);
+  public AppUserEntity setupAppUserData(String fileName) throws IOException {
+    AppUserEntity appUserEntity = jsonToObjectConverter(fileName, AppUserEntity.class);
 
     if (!TestTransaction.isActive()) TestTransaction.start();
-    appUser = appUserRepository.save(appUser);
+    appUserEntity = appUserRepository.save(appUserEntity);
     TestTransaction.flagForCommit();
     TestTransaction.end();
 
-    return appUser;
+    return appUserEntity;
   }
 
   public void setupItemData(String fileName) throws IOException {
-    Item item = jsonToObjectConverter(fileName, Item.class);
+    ItemEntity itemEntity = jsonToObjectConverter(fileName, ItemEntity.class);
 
     if (!TestTransaction.isActive()) TestTransaction.start();
-    itemRepository.save(item);
+    itemRepository.save(itemEntity);
     TestTransaction.flagForCommit();
     TestTransaction.end();
   }
 
   public void setupItemtypeData(String fileName) throws IOException {
-    Itemtype itemtype = jsonToObjectConverter(fileName, Itemtype.class);
+    ItemtypeEntity itemtypeEntity = jsonToObjectConverter(fileName, ItemtypeEntity.class);
 
     if (!TestTransaction.isActive()) TestTransaction.start();
-    itemtypeRepository.save(itemtype);
+    itemtypeRepository.save(itemtypeEntity);
     TestTransaction.flagForCommit();
     TestTransaction.end();
   }
@@ -77,7 +77,7 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
    * After the commit, we open a new transaction and try to play with the same table data within a new transaction started by TestTransaction.start() to see whether the instance has been persisted/saved/deleted
    */
 
-  // deleting in the order schedule, recipe ingredient and then recipe & category due to mapping
+  // deleting in the order schedule, recipe item and then recipe & category due to mapping
   // constraints between the entities
   public void cleanupData() {
     if (!TestTransaction.isActive()) TestTransaction.start();
@@ -87,7 +87,7 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
     TestTransaction.end();
 
     TestTransaction.start();
-    recipeIngredientRepository.deleteAll();
+    recipeItemRepository.deleteAll();
     TestTransaction.flagForCommit();
     TestTransaction.end();
 

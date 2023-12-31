@@ -1,4 +1,4 @@
-package srinageswari.programmedhousehold.common.enums;
+package srinageswari.programmedhousehold.common.search;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Order;

@@ -5,7 +5,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
-import srinageswari.programmedhousehold.model.Item;
+import srinageswari.programmedhousehold.model.ItemEntity;
 
 /**
  * @author smanickavasagam
@@ -16,12 +16,12 @@ public interface ItemMapper {
 
   ItemMapper MAPPER = Mappers.getMapper(ItemMapper.class);
 
-  Item toEntity(ItemRequestDTO dto);
+  ItemEntity toEntity(ItemRequestDTO dto);
 
-  ItemRequestDTO toDto(Item entity);
+  ItemRequestDTO toDto(ItemEntity entity);
 
   @AfterMapping
-  default void capitalizeFully(@MappingTarget Item entity, ItemRequestDTO dto) {
+  default void capitalizeFully(@MappingTarget ItemEntity entity, ItemRequestDTO dto) {
     entity.setName(WordUtils.capitalizeFully(dto.getName()));
   }
 }

@@ -1,7 +1,8 @@
 {
   "recipeId": 2,
-  "ingredientId": 0,
-  "ingredientName": "Urad dal",
-  "ingredientQty": 250,
-  "unit": "GRAM"
+  "itemId": 0,
+  "itemName": "Urad dal",
+  "itemQty": 250,
+  "unit": "GRAM",
+  "type": "Dal"
 }

@@ -4,11 +4,11 @@ import jakarta.validation.constraints.*;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.common.enums.HealthLabel;
-import srinageswari.programmedhousehold.dto.recipeingredient.RecipeIngredientRequestDTO;
-import srinageswari.programmedhousehold.model.AppUser;
-import srinageswari.programmedhousehold.model.Category;
+import srinageswari.programmedhousehold.dto.recipeitem.RecipeItemRequestDTO;
+import srinageswari.programmedhousehold.model.AppUserEntity;
+import srinageswari.programmedhousehold.model.CategoryEntity;
 import srinageswari.programmedhousehold.model.Cuisine;
+import srinageswari.programmedhousehold.model.HealthLabel;
 
 /**
  * @author smanickavasagam
@@ -39,11 +39,11 @@ public class RecipeRequestDTO {
 
   private Cuisine cuisine;
 
-  @NotNull private Category category;
+  @NotNull private CategoryEntity category;
 
   private boolean isActive;
 
-  private AppUser appUser;
+  private AppUserEntity appUser;
 
-  private List<RecipeIngredientRequestDTO> recipeIngredients;
+  private List<RecipeItemRequestDTO> recipeItemRequests;
 }

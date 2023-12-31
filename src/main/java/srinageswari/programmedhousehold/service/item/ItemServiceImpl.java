@@ -17,7 +17,7 @@ import srinageswari.programmedhousehold.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.dto.item.ItemMapper;
 import srinageswari.programmedhousehold.dto.item.ItemRequestDTO;
 import srinageswari.programmedhousehold.dto.item.ItemResponseDTO;
-import srinageswari.programmedhousehold.model.Item;
+import srinageswari.programmedhousehold.model.ItemEntity;
 import srinageswari.programmedhousehold.repository.ItemRepository;
 
 /**
@@ -44,8 +44,8 @@ public class ItemServiceImpl implements IItemService {
         .map(ItemResponseDTO::new)
         .orElseThrow(
             () -> {
-              log.error(Constants.NOT_FOUND_INGREDIENT);
-              return new NoSuchElementFoundException(Constants.NOT_FOUND_INGREDIENT);
+              log.error(Constants.NOT_FOUND_ITEM);
+              return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
             });
   }
 
@@ -57,7 +57,7 @@ public class ItemServiceImpl implements IItemService {
    */
   @Transactional(readOnly = true)
   public Page<ItemResponseDTO> findAll(SearchRequestDTO request) {
-    final SearchSpecification<Item> specification = new SearchSpecification<>(request);
+    final SearchSpecification<ItemEntity> specification = new SearchSpecification<>(request);
     final Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
     final Page<ItemResponseDTO> items =
         itemRepository.findAll(specification, pageable).map(ItemResponseDTO::new);
@@ -76,12 +76,12 @@ public class ItemServiceImpl implements IItemService {
    */
   public CommandResponseDTO create(ItemRequestDTO request) {
     if (itemRepository.existsByNameIgnoreCase(request.getName())) {
-      log.error(Constants.ALREADY_EXISTS_INGREDIENT);
-      throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_INGREDIENT);
+      log.error(Constants.ALREADY_EXISTS_ITEM);
+      throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_ITEM);
     }
-    final Item item = itemRequestMapper.toEntity(request);
-    itemRepository.save(item);
-    return CommandResponseDTO.builder().id(item.getId()).build();
+    final ItemEntity itemEntity = itemRequestMapper.toEntity(request);
+    itemRepository.save(itemEntity);
+    return CommandResponseDTO.builder().id(itemEntity.getId()).build();
   }
 
   /**
@@ -91,22 +91,22 @@ public class ItemServiceImpl implements IItemService {
    * @return
    */
   public CommandResponseDTO update(ItemRequestDTO request) {
-    final Item item =
+    final ItemEntity itemEntity =
         itemRepository
             .findById(request.getId())
             .orElseThrow(
                 () -> {
-                  log.error(Constants.NOT_FOUND_INGREDIENT);
-                  return new NoSuchElementFoundException(Constants.NOT_FOUND_INGREDIENT);
+                  log.error(Constants.NOT_FOUND_ITEM);
+                  return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
                 });
 
     if (itemRepository.existsByNameIgnoreCase(request.getName())) {
-      log.error(Constants.ALREADY_EXISTS_INGREDIENT);
-      throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_INGREDIENT);
+      log.error(Constants.ALREADY_EXISTS_ITEM);
+      throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_ITEM);
     }
-    item.setName(capitalizeFully(request.getName()));
-    itemRepository.save(item);
-    return CommandResponseDTO.builder().id(item.getId()).build();
+    itemEntity.setName(capitalizeFully(request.getName()));
+    itemRepository.save(itemEntity);
+    return CommandResponseDTO.builder().id(itemEntity.getId()).build();
   }
 
   /**
@@ -116,14 +116,14 @@ public class ItemServiceImpl implements IItemService {
    * @return
    */
   public void deleteById(Long id) {
-    final Item item =
+    final ItemEntity itemEntity =
         itemRepository
             .findById(id)
             .orElseThrow(
                 () -> {
-                  log.error(Constants.NOT_FOUND_INGREDIENT);
-                  return new NoSuchElementFoundException(Constants.NOT_FOUND_INGREDIENT);
+                  log.error(Constants.NOT_FOUND_ITEM);
+                  return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
                 });
-    itemRepository.delete(item);
+    itemRepository.delete(itemEntity);
   }
 }

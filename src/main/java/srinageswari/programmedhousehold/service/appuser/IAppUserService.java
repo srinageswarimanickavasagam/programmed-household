@@ -1,13 +1,13 @@
 package srinageswari.programmedhousehold.service.appuser;
 
 import java.util.Optional;
-import srinageswari.programmedhousehold.model.AppUser;
+import srinageswari.programmedhousehold.model.AppUserEntity;
 
 /**
  * @author smanickavasagam
  */
 public interface IAppUserService {
-  Optional<AppUser> findByEmail(String email);
+  Optional<AppUserEntity> findByEmail(String email);
 
-  void save(AppUser user);
+  void save(AppUserEntity user);
 }

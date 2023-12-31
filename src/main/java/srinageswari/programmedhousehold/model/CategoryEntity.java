@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.common.enums.Day;
-import srinageswari.programmedhousehold.common.enums.Difficulty;
-import srinageswari.programmedhousehold.common.enums.Meal;
 
 /**
  * @author smanickavasagam
@@ -20,7 +17,7 @@ import srinageswari.programmedhousehold.common.enums.Meal;
 @AllArgsConstructor
 @Entity
 @Table(name = "category")
-public class Category {
+public class CategoryEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +43,13 @@ public class Category {
   private boolean isActive;
 
   @OneToMany(mappedBy = "category")
-  private Set<Recipe> recipes;
+  private Set<RecipeEntity> recipes;
 
-  public Category(Long categoryId) {
+  public CategoryEntity(Long categoryId) {
     this.categoryId = categoryId;
   }
 
-  public Category(
+  public CategoryEntity(
       Long categoryId,
       String name,
       Meal meal,
@@ -72,9 +69,10 @@ public class Category {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof Category)) return false;
-    Category category = (Category) o;
-    return getCategoryId() != null && Objects.equals(getCategoryId(), category.getCategoryId());
+    if (!(o instanceof CategoryEntity)) return false;
+    CategoryEntity categoryEntity = (CategoryEntity) o;
+    return getCategoryId() != null
+        && Objects.equals(getCategoryId(), categoryEntity.getCategoryId());
   }
 
   @Override

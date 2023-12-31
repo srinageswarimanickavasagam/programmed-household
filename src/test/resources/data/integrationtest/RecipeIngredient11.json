@@ -1,7 +1,8 @@
 {
   "recipeId": 1,
-  "ingredientId": 0,
-  "ingredientName": "Garam Masala",
-  "ingredientQty": 200,
-  "unit": "GRAM"
+  "itemId": 0,
+  "itemName": "Garam Masala",
+  "itemQty": 200,
+  "unit": "GRAM",
+  "type": "Masala Powder"
 }

@@ -5,7 +5,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
-import srinageswari.programmedhousehold.model.Recipe;
+import srinageswari.programmedhousehold.model.RecipeEntity;
 
 /**
  * @author smanickavasagam
@@ -16,12 +16,12 @@ public interface RecipeMapper {
 
   RecipeMapper MAPPER = Mappers.getMapper(RecipeMapper.class);
 
-  Recipe toEntity(RecipeRequestDTO dto);
+  RecipeEntity toEntity(RecipeRequestDTO dto);
 
-  RecipeRequestDTO toDto(Recipe entity);
+  RecipeRequestDTO toDto(RecipeEntity entity);
 
   @AfterMapping
-  default void getCapitalizedTitle(@MappingTarget Recipe entity, RecipeRequestDTO dto) {
+  default void getCapitalizedTitle(@MappingTarget RecipeEntity entity, RecipeRequestDTO dto) {
     entity.setTitle(WordUtils.capitalizeFully(dto.getTitle()));
   }
 }

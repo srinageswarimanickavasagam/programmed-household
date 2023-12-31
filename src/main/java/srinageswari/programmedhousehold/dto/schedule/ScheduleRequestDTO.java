@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.model.Recipe;
+import srinageswari.programmedhousehold.model.RecipeEntity;
 
 /**
  * @author smanickavasagam
@@ -17,5 +17,5 @@ public class ScheduleRequestDTO {
 
   @NotNull private Date scheduledDt;
 
-  @NotNull private Recipe recipe;
+  @NotNull private RecipeEntity recipe;
 }

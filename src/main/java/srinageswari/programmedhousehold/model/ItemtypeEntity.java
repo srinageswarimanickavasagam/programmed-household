@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "itemtype")
-public class Itemtype {
+public class ItemtypeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long typeId;
@@ -26,17 +26,17 @@ public class Itemtype {
   private String type;
 
   @OneToMany(mappedBy = "itemtype")
-  private Set<Item> items;
+  private Set<ItemEntity> items;
 
   public void setTypeId(Long id) {
     this.typeId = id;
   }
 
-  public Itemtype(Long typeId) {
+  public ItemtypeEntity(Long typeId) {
     this.typeId = typeId;
   }
 
-  public Itemtype(Long typeId, String type) {
+  public ItemtypeEntity(Long typeId, String type) {
     this.typeId = typeId;
     this.type = type;
   }
@@ -45,7 +45,7 @@ public class Itemtype {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Itemtype that = (Itemtype) o;
+    ItemtypeEntity that = (ItemtypeEntity) o;
     return type.equals(that.type);
   }
 

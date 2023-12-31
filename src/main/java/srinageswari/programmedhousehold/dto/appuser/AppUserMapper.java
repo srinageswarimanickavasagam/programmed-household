@@ -5,7 +5,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
-import srinageswari.programmedhousehold.model.AppUser;
+import srinageswari.programmedhousehold.model.AppUserEntity;
 
 /**
  * @author smanickavasagam
@@ -16,12 +16,12 @@ public interface AppUserMapper {
 
   AppUserMapper MAPPER = Mappers.getMapper(AppUserMapper.class);
 
-  AppUser toEntity(AppUserRequestDTO dto);
+  AppUserEntity toEntity(AppUserRequestDTO dto);
 
-  AppUserRequestDTO toDto(AppUser entity);
+  AppUserRequestDTO toDto(AppUserEntity entity);
 
   @AfterMapping
-  default void capitalizeFully(@MappingTarget AppUser entity, AppUserRequestDTO dto) {
+  default void capitalizeFully(@MappingTarget AppUserEntity entity, AppUserRequestDTO dto) {
     entity.setEmail((WordUtils.capitalizeFully(dto.getEmail())));
   }
 }

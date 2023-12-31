@@ -1,4 +1,4 @@
-package srinageswari.programmedhousehold.common.enums;
+package srinageswari.programmedhousehold.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

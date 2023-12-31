@@ -25,12 +25,10 @@ public final class Constants {
   public static final String METHOD_ARGUMENT_NOT_VALID = "MethodArgumentNotValid exception";
   public static final String NOT_FOUND = "Requested element is not found";
   public static final String NOT_FOUND_RECORD = "Not found any record";
-  public static final String NOT_FOUND_INGREDIENT = "Requested ingredient is not found";
+  public static final String NOT_FOUND_ITEM = "Requested item is not found";
   public static final String NOT_FOUND_RECIPE = "Requested recipe is not found";
   public static final String ALREADY_EXISTS = "Requested element already exists";
-  public static final String ALREADY_EXISTS_INGREDIENT =
-      "Requested ingredient already exists (IngredientId: %d)";
+  public static final String ALREADY_EXISTS_ITEM = "Requested item already exists (Item: %d)";
   public static final String NOT_VALIDATED_ELEMENT = "Failed to validate the input";
-  public static final String NOT_VALIDATED_INGREDIENT =
-      "There are duplicate ingredients for the given recipe";
+  public static final String NOT_VALIDATED_ITEM = "There are duplicate items for the given recipe";
 }

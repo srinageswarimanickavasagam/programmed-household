@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "appuser")
-public class AppUser {
+public class AppUserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
@@ -34,23 +34,23 @@ public class AppUser {
     this.createdAt = LocalDateTime.now();
   }
 
-  public AppUser(Long userId, String email, String name, String imageUrl, String provider) {
+  public AppUserEntity(Long userId, String email, String name, String imageUrl, String provider) {
     this.userId = userId;
     this.email = email;
     this.name = name;
     this.provider = provider;
   }
 
-  public AppUser(Long userId) {
+  public AppUserEntity(Long userId) {
     this.userId = userId;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof AppUser)) return false;
-    AppUser appUser = (AppUser) o;
-    return getUserId() != null && Objects.equals(getUserId(), appUser.getUserId());
+    if (!(o instanceof AppUserEntity)) return false;
+    AppUserEntity appUserEntity = (AppUserEntity) o;
+    return getUserId() != null && Objects.equals(getUserId(), appUserEntity.getUserId());
   }
 
   @Override

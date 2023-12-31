@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class RecipeIngredientId implements Serializable {
+public class RecipeItemId implements Serializable {
 
   @Column(name = "recipe_id", nullable = false)
   private Long recipeId;
@@ -28,7 +28,7 @@ public class RecipeIngredientId implements Serializable {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    RecipeIngredientId that = (RecipeIngredientId) o;
+    RecipeItemId that = (RecipeItemId) o;
     return recipeId.equals(that.recipeId) && itemId.equals(that.itemId);
   }
 

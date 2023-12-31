@@ -3,7 +3,7 @@ package srinageswari.programmedhousehold.common.dto;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.common.enums.Sort;
+import srinageswari.programmedhousehold.common.search.Sort;
 
 /**
  * @author smanickavasagam

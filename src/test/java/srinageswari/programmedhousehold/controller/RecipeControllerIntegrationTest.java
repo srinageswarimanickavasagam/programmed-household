@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import srinageswari.programmedhousehold.BaseIntegrationTest;
 import srinageswari.programmedhousehold.dto.recipe.RecipeRequestDTO;
-import srinageswari.programmedhousehold.model.AppUser;
+import srinageswari.programmedhousehold.model.AppUserEntity;
 import srinageswari.programmedhousehold.service.appuser.AppUserServiceImpl;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,8 +34,8 @@ public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
 
   @BeforeEach
   public void before() throws IOException {
-    AppUser appUser = setupAppUserData("AppUser1.json");
-    Mockito.when(appUserServiceImpl.getCurrentLoggedInUser()).thenReturn(appUser);
+    AppUserEntity appUserEntity = setupAppUserData("AppUser1.json");
+    Mockito.when(appUserServiceImpl.getCurrentLoggedInUser()).thenReturn(appUserEntity);
   }
 
   @Test

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.common.enums.HealthLabel;
 
 /**
  * @author smanickavasagam
@@ -17,13 +16,13 @@ import srinageswari.programmedhousehold.common.enums.HealthLabel;
 @AllArgsConstructor
 @Entity
 @Table(name = "recipe")
-public class Recipe {
+public class RecipeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 50, unique = true)
   private String title;
 
   @Column(length = 100)
@@ -47,36 +46,36 @@ public class Recipe {
   private HealthLabel healthLabel;
 
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+  private Set<RecipeItemEntity> recipeItems = new HashSet<>();
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  AppUser appUser;
+  AppUserEntity appUser;
 
   @ManyToOne
   @JoinColumn(name = "category_id")
-  Category category;
+  CategoryEntity category;
 
   @OneToOne(mappedBy = "recipe")
-  private Schedule schedule;
+  private ScheduleEntity schedule;
 
   private boolean isActive;
 
-  public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
-    recipeIngredients.add(recipeIngredient);
-    recipeIngredient.setRecipe(this);
+  public void addRecipeItem(RecipeItemEntity recipeItemEntity) {
+    recipeItems.add(recipeItemEntity);
+    recipeItemEntity.setRecipe(this);
   }
 
-  public void removeRecipeIngredient(RecipeIngredient recipeIngredient) {
-    recipeIngredients.remove(recipeIngredient);
-    recipeIngredient.setRecipe(null);
+  public void removeRecipeItem(RecipeItemEntity recipeItemEntity) {
+    recipeItems.remove(recipeItemEntity);
+    recipeItemEntity.setRecipe(null);
   }
 
-  public Recipe(Long id) {
+  public RecipeEntity(Long id) {
     this.id = id;
   }
 
-  public Recipe(
+  public RecipeEntity(
       Long id,
       String title,
       String description,
@@ -99,16 +98,16 @@ public class Recipe {
     this.isActive = isActive;
   }
 
-  public void setAppUser(AppUser appUser) {
-    this.appUser = appUser;
+  public void setAppUser(AppUserEntity appUserEntity) {
+    this.appUser = appUserEntity;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof Recipe)) return false;
-    Recipe recipe = (Recipe) o;
-    return getId() != null && Objects.equals(getId(), recipe.getId());
+    if (!(o instanceof RecipeEntity)) return false;
+    RecipeEntity recipeEntity = (RecipeEntity) o;
+    return getId() != null && Objects.equals(getId(), recipeEntity.getId());
   }
 
   @Override
