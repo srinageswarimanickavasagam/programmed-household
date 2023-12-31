@@ -1,0 +1,9 @@
+{
+  "id": 2,
+  "name":"IdliRice",
+  "stockQty":250,
+  "unit":"GRAM",
+  "stockedAt":"2023-12-28",
+  "itemtype": 2,
+  "essential": true
+}

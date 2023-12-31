@@ -1,4 +1,4 @@
-package srinageswari.programmedhousehold;
+package srinageswari.programmedhousehold.controller;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

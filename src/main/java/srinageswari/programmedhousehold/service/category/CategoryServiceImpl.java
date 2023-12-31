@@ -90,7 +90,7 @@ public class CategoryServiceImpl implements ICategoryService {
   public CommandResponseDTO update(CategoryRequestDTO request) {
     final Category category =
         categoryRepository
-            .findById(request.getId())
+            .findById(request.getCategoryId())
             .orElseThrow(
                 () -> {
                   log.error(Constants.NOT_FOUND_RECIPE);

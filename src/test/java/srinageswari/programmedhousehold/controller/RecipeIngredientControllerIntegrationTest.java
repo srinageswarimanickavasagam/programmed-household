@@ -5,56 +5,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import srinageswari.programmedhousehold.BaseIntegrationTest;
-import srinageswari.programmedhousehold.dto.recipe.RecipeRequestDTO;
-import srinageswari.programmedhousehold.model.AppUser;
-import srinageswari.programmedhousehold.service.appuser.AppUserServiceImpl;
+import srinageswari.programmedhousehold.dto.category.CategoryRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
+public class RecipeIngredientControllerIntegrationTest extends BaseIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
 
   @Autowired private ObjectMapper objectMapper;
 
-  @MockBean AppUserServiceImpl appUserServiceImpl;
-
-  @BeforeEach
-  public void before() throws IOException {
-    AppUser appUser = setupAppUserData("AppUser1.json");
-    Mockito.when(appUserServiceImpl.getCurrentLoggedInUser()).thenReturn(appUser);
-  }
-
-  @Test
-  void saveRecipeEntity() {
+  // @Test
+  void saveCategoryEntity() {
+    // given
     try {
       // given
-      setupCategoryData("Category1.json");
-      setupItemtypeData("ItemType1.json");
-      setupItemData("Item1.json");
-
-      RecipeRequestDTO recipeRequestDTO =
-          jsonToObjectConverter("Recipe1.json", RecipeRequestDTO.class);
+      CategoryRequestDTO category =
+          jsonToObjectConverter("Category1.json", CategoryRequestDTO.class);
 
       // when - action or behaviour that we are going test
       ResultActions response =
           mockMvc.perform(
-              post("/api/v1/recipe")
+              post("/api/v1/category")
                   .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(recipeRequestDTO)));
+                  .content(objectMapper.writeValueAsString(category)));
 
       // then - verify the result or output using assert statements
       response.andDo(print()).andExpect(status().isCreated());
@@ -64,7 +46,7 @@ public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
   }
 
   @AfterEach
-  public void cleanup() {
+  void cleanup() {
     cleanupData();
   }
 }

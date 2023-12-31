@@ -15,7 +15,7 @@ import srinageswari.programmedhousehold.common.enums.Meal;
 @NoArgsConstructor
 public class CategoryRequestDTO {
 
-  private Long id;
+  private Long categoryId;
 
   @NotBlank private String name;
 
