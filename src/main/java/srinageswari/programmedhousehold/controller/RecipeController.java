@@ -63,7 +63,7 @@ public class RecipeController {
    */
   @PostMapping("/recipe")
   public ResponseEntity<APIResponseDTO<CommandResponseDTO>> create(
-      @Valid @ValidItem(message = Constants.NOT_VALIDATED_INGREDIENT) @RequestBody
+      @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody
           RecipeRequestDTO request) {
     final CommandResponseDTO response = recipeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -77,7 +77,7 @@ public class RecipeController {
    */
   @PutMapping("/recipe")
   public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
-      @Valid @ValidItem(message = Constants.NOT_VALIDATED_INGREDIENT) @RequestBody
+      @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody
           RecipeRequestDTO request) {
     final CommandResponseDTO response = recipeService.update(request);
     return ResponseEntity.ok(

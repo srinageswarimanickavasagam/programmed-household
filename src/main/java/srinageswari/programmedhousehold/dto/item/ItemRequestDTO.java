@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.common.enums.Unit;
-import srinageswari.programmedhousehold.model.Itemtype;
+import srinageswari.programmedhousehold.model.ItemtypeEntity;
+import srinageswari.programmedhousehold.model.Unit;
 
 /**
  * @author smanickavasagam
@@ -19,11 +19,11 @@ public class ItemRequestDTO {
 
   @NotNull private String name;
 
-  private int stockQty;
+  private int itemStockQty;
 
   private Unit unit;
 
   private Date stockedDt;
 
-  @NotNull private Itemtype itemtype;
+  @NotNull private ItemtypeEntity itemtype;
 }

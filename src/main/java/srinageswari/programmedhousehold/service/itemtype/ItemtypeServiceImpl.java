@@ -14,7 +14,7 @@ import srinageswari.programmedhousehold.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.dto.itemtype.ItemtypeMapper;
 import srinageswari.programmedhousehold.dto.itemtype.ItemtypeRequestDTO;
 import srinageswari.programmedhousehold.dto.itemtype.ItemtypeResponseDTO;
-import srinageswari.programmedhousehold.model.Itemtype;
+import srinageswari.programmedhousehold.model.ItemtypeEntity;
 import srinageswari.programmedhousehold.repository.ItemtypeRepository;
 
 /**
@@ -55,7 +55,7 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    */
   @Transactional(readOnly = true)
   public Page<ItemtypeResponseDTO> findAll(SearchRequestDTO request) {
-    final SearchSpecification<Itemtype> specification = new SearchSpecification<>(request);
+    final SearchSpecification<ItemtypeEntity> specification = new SearchSpecification<>(request);
     final Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
     final Page<ItemtypeResponseDTO> itemtypes =
         itemtypeRepository.findAll(specification, pageable).map(ItemtypeResponseDTO::new);
@@ -74,9 +74,9 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    */
   @Transactional
   public CommandResponseDTO create(ItemtypeRequestDTO request) {
-    final Itemtype itemtype = itemtypeMapper.toEntity(request);
-    itemtypeRepository.save(itemtype);
-    return CommandResponseDTO.builder().id(itemtype.getTypeId()).build();
+    final ItemtypeEntity itemtypeEntity = itemtypeMapper.toEntity(request);
+    itemtypeRepository.save(itemtypeEntity);
+    return CommandResponseDTO.builder().id(itemtypeEntity.getTypeId()).build();
   }
 
   /**
@@ -87,7 +87,7 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    */
   @Transactional
   public CommandResponseDTO update(ItemtypeRequestDTO request) {
-    final Itemtype itemtype =
+    final ItemtypeEntity itemtypeEntity =
         itemtypeRepository
             .findById(request.getTypeId())
             .orElseThrow(
@@ -95,9 +95,9 @@ public class ItemtypeServiceImpl implements IItemtypeService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    itemtype.setType(request.getType());
-    itemtypeRepository.save(itemtype);
-    return CommandResponseDTO.builder().id(itemtype.getTypeId()).build();
+    itemtypeEntity.setType(request.getType());
+    itemtypeRepository.save(itemtypeEntity);
+    return CommandResponseDTO.builder().id(itemtypeEntity.getTypeId()).build();
   }
 
   /**
@@ -107,7 +107,7 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    * @return
    */
   public void deleteById(Long id) {
-    final Itemtype itemtype =
+    final ItemtypeEntity itemtypeEntity =
         itemtypeRepository
             .findById(id)
             .orElseThrow(
@@ -115,6 +115,6 @@ public class ItemtypeServiceImpl implements IItemtypeService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    itemtypeRepository.delete(itemtype);
+    itemtypeRepository.delete(itemtypeEntity);
   }
 }

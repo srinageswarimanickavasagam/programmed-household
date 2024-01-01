@@ -12,6 +12,13 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
       - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        hbm2ddl:
+          auto: create
+        show_sql: true
 app:
   security:
     enabled: false

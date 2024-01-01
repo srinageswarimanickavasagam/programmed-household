@@ -1,7 +1,7 @@
 package srinageswari.programmedhousehold.dto.category;
 
 import lombok.Data;
-import srinageswari.programmedhousehold.model.Category;
+import srinageswari.programmedhousehold.model.CategoryEntity;
 
 /**
  * @author smanickavasagam
@@ -18,13 +18,13 @@ public class CategoryResponseDTO {
   private String difficulty;
   private boolean isActive;
 
-  public CategoryResponseDTO(Category category) {
-    this.id = category.getCategoryId();
-    this.name = category.getName();
-    this.meal = category.getMeal().getLabel();
-    this.sidedish = category.isSidedish();
-    this.day = category.getDay().getLabel();
-    this.difficulty = category.getDifficulty().getLabel();
-    this.isActive = category.isActive();
+  public CategoryResponseDTO(CategoryEntity categoryEntity) {
+    this.id = categoryEntity.getCategoryId();
+    this.name = categoryEntity.getName();
+    this.meal = categoryEntity.getMeal().getLabel();
+    this.sidedish = categoryEntity.isSidedish();
+    this.day = categoryEntity.getDay().getLabel();
+    this.difficulty = categoryEntity.getDifficulty().getLabel();
+    this.isActive = categoryEntity.isActive();
   }
 }

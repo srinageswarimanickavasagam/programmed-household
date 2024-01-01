@@ -3,8 +3,8 @@ package srinageswari.programmedhousehold.dto.recipe;
 import java.util.List;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import srinageswari.programmedhousehold.dto.recipeingredient.RecipeIngredientResponseDTO;
-import srinageswari.programmedhousehold.model.Recipe;
+import srinageswari.programmedhousehold.dto.recipeitem.RecipeItemResponseDTO;
+import srinageswari.programmedhousehold.model.RecipeEntity;
 
 /**
  * @author smanickavasagam
@@ -26,21 +26,22 @@ public class RecipeResponseDTO {
   private String cuisine;
   private String category;
   private boolean isActive;
-  private List<RecipeIngredientResponseDTO> ingredients;
+  private List<RecipeItemResponseDTO> recipeItemResponses;
 
-  public RecipeResponseDTO(Recipe recipe, List<RecipeIngredientResponseDTO> ingredients) {
-    this.id = recipe.getId();
-    this.title = recipe.getTitle();
-    this.description = recipe.getDescription();
-    this.prepTime = recipe.getPrepTime();
-    this.cookTime = recipe.getCookTime();
-    this.servings = recipe.getServings();
-    this.instructions = recipe.getInstructions();
-    this.healthLabel = recipe.getHealthLabel().getLabel();
-    this.ingredients = ingredients;
-    this.userEmail = recipe.getAppUser().getEmail();
-    this.cuisine = recipe.getCuisine().getLabel();
-    this.category = recipe.getCategory().getName();
-    this.isActive = recipe.isActive();
+  public RecipeResponseDTO(
+      RecipeEntity recipeEntity, List<RecipeItemResponseDTO> recipeItemResponses) {
+    this.id = recipeEntity.getId();
+    this.title = recipeEntity.getTitle();
+    this.description = recipeEntity.getDescription();
+    this.prepTime = recipeEntity.getPrepTime();
+    this.cookTime = recipeEntity.getCookTime();
+    this.servings = recipeEntity.getServings();
+    this.instructions = recipeEntity.getInstructions();
+    this.healthLabel = recipeEntity.getHealthLabel().getLabel();
+    this.recipeItemResponses = recipeItemResponses;
+    this.userEmail = recipeEntity.getAppUser().getEmail();
+    this.cuisine = recipeEntity.getCuisine().getLabel();
+    this.category = recipeEntity.getCategory().getName();
+    this.isActive = recipeEntity.isActive();
   }
 }

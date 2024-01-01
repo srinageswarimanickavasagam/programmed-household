@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import srinageswari.programmedhousehold.model.Recipe;
+import srinageswari.programmedhousehold.model.RecipeEntity;
 
 /**
  * @author smanickavasagam
  */
 @Repository
 public interface RecipeRepository
-    extends JpaRepository<Recipe, Long>, JpaSpecificationExecutor<Recipe> {
+    extends JpaRepository<RecipeEntity, Long>, JpaSpecificationExecutor<RecipeEntity> {
   @Query(value = "SELECT * FROM recipe r where r.category_id = ?1", nativeQuery = true)
-  List<Recipe> findrecipesByCategoryId(Long categoryId);
+  List<RecipeEntity> findrecipesByCategoryId(Long categoryId);
 }

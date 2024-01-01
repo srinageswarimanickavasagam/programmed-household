@@ -2,7 +2,7 @@ package srinageswari.programmedhousehold.dto.itemtype;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.model.Itemtype;
+import srinageswari.programmedhousehold.model.ItemtypeEntity;
 
 /**
  * @author smanickavasagam
@@ -15,8 +15,8 @@ public class ItemtypeResponseDTO {
   private Long id;
   private String type;
 
-  public ItemtypeResponseDTO(Itemtype itemtype) {
-    this.id = itemtype.getTypeId();
-    this.type = itemtype.getType();
+  public ItemtypeResponseDTO(ItemtypeEntity itemtypeEntity) {
+    this.id = itemtypeEntity.getTypeId();
+    this.type = itemtypeEntity.getType();
   }
 }

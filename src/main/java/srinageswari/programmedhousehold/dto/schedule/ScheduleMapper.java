@@ -5,7 +5,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
-import srinageswari.programmedhousehold.model.Schedule;
+import srinageswari.programmedhousehold.model.ScheduleEntity;
 
 /**
  * @author smanickavasagam
@@ -16,12 +16,13 @@ public interface ScheduleMapper {
 
   ScheduleMapper MAPPER = Mappers.getMapper(ScheduleMapper.class);
 
-  Schedule toEntity(ScheduleRequestDTO dto);
+  ScheduleEntity toEntity(ScheduleRequestDTO dto);
 
-  ScheduleRequestDTO toDto(Schedule schedule);
+  ScheduleRequestDTO toDto(ScheduleEntity scheduleEntity);
 
   @AfterMapping
-  default void capitalizeFully(@MappingTarget Schedule schedule, ScheduleRequestDTO dto) {
-    schedule.setId(Long.valueOf(WordUtils.capitalizeFully(dto.getId().toString())));
+  default void capitalizeFully(
+      @MappingTarget ScheduleEntity scheduleEntity, ScheduleRequestDTO dto) {
+    scheduleEntity.setId(Long.valueOf(WordUtils.capitalizeFully(dto.getId().toString())));
   }
 }

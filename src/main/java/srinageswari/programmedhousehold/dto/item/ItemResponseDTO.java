@@ -2,7 +2,7 @@ package srinageswari.programmedhousehold.dto.item;
 
 import java.util.Date;
 import lombok.Data;
-import srinageswari.programmedhousehold.model.Item;
+import srinageswari.programmedhousehold.model.ItemEntity;
 
 /**
  * @author smanickavasagam
@@ -13,17 +13,17 @@ public class ItemResponseDTO {
 
   private Long id;
   private String name;
-  private int stockQty;
+  private int itemStockQty;
   private String unit;
   private Date stockedDt;
   private String itemtype;
 
-  public ItemResponseDTO(Item item) {
-    this.id = item.getId();
-    this.name = item.getName();
-    this.stockQty = item.getStockQty();
-    this.unit = item.getUnit().getLabel();
-    this.stockedDt = item.getStockedDt();
-    this.itemtype = item.getItemtype().getType();
+  public ItemResponseDTO(ItemEntity itemEntity) {
+    this.id = itemEntity.getId();
+    this.name = itemEntity.getName();
+    this.itemStockQty = itemEntity.getItemStockQty();
+    this.unit = itemEntity.getUnit().getLabel();
+    this.stockedDt = itemEntity.getStockedDt();
+    this.itemtype = itemEntity.getItemtype().getType();
   }
 }

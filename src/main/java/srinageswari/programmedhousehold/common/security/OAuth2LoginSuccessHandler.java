@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import srinageswari.programmedhousehold.model.AppUser;
+import srinageswari.programmedhousehold.model.AppUserEntity;
 import srinageswari.programmedhousehold.service.appuser.IAppUserService;
 
 /**
@@ -55,11 +55,12 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
               SecurityContextHolder.getContext().setAuthentication(securityAuth);
             },
             () -> {
-              AppUser appUser = new AppUser();
-              appUser.setEmail(email);
-              appUser.setName(name);
-              appUser.setProvider(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
-              appUserService.save(appUser);
+              AppUserEntity appUserEntity = new AppUserEntity();
+              appUserEntity.setEmail(email);
+              appUserEntity.setName(name);
+              appUserEntity.setProvider(
+                  oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
+              appUserService.save(appUserEntity);
               DefaultOAuth2User newUser =
                   new DefaultOAuth2User(
                       List.of(new SimpleGrantedAuthority("ADMIN")), attributes, "email");

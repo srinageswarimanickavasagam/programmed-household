@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.common.enums.FilterType;
-import srinageswari.programmedhousehold.common.enums.Operator;
+import srinageswari.programmedhousehold.common.search.FilterType;
+import srinageswari.programmedhousehold.common.search.Operator;
 
 /**
  * @author smanickavasagam

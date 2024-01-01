@@ -18,16 +18,13 @@ import srinageswari.programmedhousehold.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.dto.recipe.RecipeMapper;
 import srinageswari.programmedhousehold.dto.recipe.RecipeRequestDTO;
 import srinageswari.programmedhousehold.dto.recipe.RecipeResponseDTO;
-import srinageswari.programmedhousehold.dto.recipeingredient.RecipeIngredientResponseDTO;
-import srinageswari.programmedhousehold.model.Item;
-import srinageswari.programmedhousehold.model.Recipe;
-import srinageswari.programmedhousehold.model.RecipeIngredient;
-import srinageswari.programmedhousehold.model.Schedule;
+import srinageswari.programmedhousehold.dto.recipeitem.RecipeItemResponseDTO;
+import srinageswari.programmedhousehold.model.*;
 import srinageswari.programmedhousehold.repository.ItemRepository;
+import srinageswari.programmedhousehold.repository.ItemtypeRepository;
 import srinageswari.programmedhousehold.repository.RecipeRepository;
 import srinageswari.programmedhousehold.repository.ScheduleRepository;
 import srinageswari.programmedhousehold.service.appuser.AppUserServiceImpl;
-import srinageswari.programmedhousehold.service.category.ICategoryService;
 
 /**
  * @author smanickavasagam
@@ -41,8 +38,8 @@ public class RecipeServiceImpl implements IRecipeService {
   private final ItemRepository itemRepository;
   private final RecipeMapper recipeMapper;
   private final AppUserServiceImpl appUserServiceImpl;
-  private final ICategoryService categoryService;
   private final ScheduleRepository scheduleRepository;
+  private final ItemtypeRepository itemtypeRepository;
 
   /**
    * Fetches a recipe by the given id
@@ -58,9 +55,7 @@ public class RecipeServiceImpl implements IRecipeService {
             recipe ->
                 new RecipeResponseDTO(
                     recipe,
-                    recipe.getRecipeIngredients().stream()
-                        .map(RecipeIngredientResponseDTO::new)
-                        .toList()))
+                    recipe.getRecipeItems().stream().map(RecipeItemResponseDTO::new).toList()))
         .orElseThrow(
             () -> {
               log.error(Constants.NOT_FOUND_RECIPE);
@@ -76,7 +71,7 @@ public class RecipeServiceImpl implements IRecipeService {
    */
   @Transactional(readOnly = true)
   public Page<RecipeResponseDTO> findAll(SearchRequestDTO request) {
-    final SearchSpecification<Recipe> specification = new SearchSpecification<>(request);
+    final SearchSpecification<RecipeEntity> specification = new SearchSpecification<>(request);
     final Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
     final Page<RecipeResponseDTO> recipes =
         recipeRepository
@@ -85,9 +80,7 @@ public class RecipeServiceImpl implements IRecipeService {
                 recipe ->
                     new RecipeResponseDTO(
                         recipe,
-                        recipe.getRecipeIngredients().stream()
-                            .map(RecipeIngredientResponseDTO::new)
-                            .toList()));
+                        recipe.getRecipeItems().stream().map(RecipeItemResponseDTO::new).toList()));
     if (recipes.isEmpty()) {
       log.error(Constants.NOT_FOUND_RECORD);
       throw new NoSuchElementFoundException(Constants.NOT_FOUND_RECORD);
@@ -96,56 +89,64 @@ public class RecipeServiceImpl implements IRecipeService {
   }
 
   /**
-   * Creates a new recipe and ingredients belonging to the recipe using the given request parameters
+   * Creates a new recipe and items belonging to the recipe using the given request parameters
    *
    * @param request
    * @return
    */
   @Transactional
   public CommandResponseDTO create(RecipeRequestDTO request) {
-    final Recipe recipe = recipeMapper.toEntity(request);
-    recipe.getRecipeIngredients().clear();
+    final RecipeEntity recipeEntity = recipeMapper.toEntity(request);
+    recipeEntity.getRecipeItems().clear();
     request
-        .getRecipeIngredients()
+        .getRecipeItemRequests()
         .forEach(
-            recipeIngredient -> {
-              final Item item;
-              if (recipeIngredient.getIngredientId() != 0) {
-                item =
+            recipeItemRequestDTO -> {
+              final ItemEntity itemEntity;
+              if (recipeItemRequestDTO.getItemId() != 0) {
+                itemEntity =
                     itemRepository
-                        .findById(recipeIngredient.getIngredientId())
+                        .findById(recipeItemRequestDTO.getItemId())
                         .orElseThrow(
                             () -> {
-                              log.error(Constants.NOT_FOUND_INGREDIENT);
-                              return new NoSuchElementFoundException(
-                                  Constants.NOT_FOUND_INGREDIENT);
+                              log.error(Constants.NOT_FOUND_ITEM);
+                              return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
                             });
               } else {
-                // check if the new ingredient is already defined before
-                if (itemRepository.existsByNameIgnoreCase(recipeIngredient.getIngredientName())) {
+                // check if the new item is already defined before
+                if (itemRepository.existsByNameIgnoreCase(recipeItemRequestDTO.getItemName())) {
                   log.error(
                       String.format(
-                          Constants.ALREADY_EXISTS_INGREDIENT, recipeIngredient.getIngredientId()));
+                          Constants.ALREADY_EXISTS_ITEM, recipeItemRequestDTO.getItemId()));
                   throw new ElementAlreadyExistsException(
                       String.format(
-                          Constants.ALREADY_EXISTS_INGREDIENT, recipeIngredient.getIngredientId()));
+                          Constants.ALREADY_EXISTS_ITEM, recipeItemRequestDTO.getItemId()));
                 }
-                item = itemRepository.save(new Item(0L, recipeIngredient.getIngredientName()));
+                ItemtypeEntity itemtype =
+                    itemtypeRepository.findByType(recipeItemRequestDTO.getType());
+                if (null == itemtype) {
+                  itemtype =
+                      itemtypeRepository.save(
+                          new ItemtypeEntity(0L, recipeItemRequestDTO.getType()));
+                }
+                itemEntity =
+                    itemRepository.save(
+                        new ItemEntity(0L, recipeItemRequestDTO.getItemName(), itemtype));
               }
-              recipe.addRecipeIngredient(
-                  new RecipeIngredient(
-                      recipe,
-                      item,
-                      recipeIngredient.getUnit(),
-                      recipeIngredient.getIngredientQty()));
+              recipeEntity.addRecipeItem(
+                  new RecipeItemEntity(
+                      recipeEntity,
+                      itemEntity,
+                      recipeItemRequestDTO.getUnit(),
+                      recipeItemRequestDTO.getItemQty()));
             });
-    recipe.setAppUser(appUserServiceImpl.getCurrentLoggedInUser());
-    recipeRepository.save(recipe);
-    if (recipe.isActive()) {
-      Schedule schedule = new Schedule(recipe);
-      scheduleRepository.save(schedule);
+    recipeEntity.setAppUser(appUserServiceImpl.getCurrentLoggedInUser());
+    recipeRepository.save(recipeEntity);
+    if (recipeEntity.isActive()) {
+      ScheduleEntity scheduleEntity = new ScheduleEntity(recipeEntity);
+      scheduleRepository.save(scheduleEntity);
     }
-    return CommandResponseDTO.builder().id(recipe.getId()).build();
+    return CommandResponseDTO.builder().id(recipeEntity.getId()).build();
   }
 
   /**
@@ -155,9 +156,9 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return
    */
   @Transactional
-  // for adding/removing ingredients for a current recipe, use RecipeIngredientService methods
+  // for adding/removing items for a current recipe, use RecipeItemService methods
   public CommandResponseDTO update(RecipeRequestDTO request) {
-    final Recipe recipe =
+    final RecipeEntity recipeEntity =
         recipeRepository
             .findById(request.getId())
             .orElseThrow(
@@ -165,15 +166,15 @@ public class RecipeServiceImpl implements IRecipeService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    recipe.setTitle(capitalizeFully(request.getTitle()));
-    recipe.setDescription(request.getDescription());
-    recipe.setPrepTime(request.getPrepTime());
-    recipe.setCookTime(request.getCookTime());
-    recipe.setServings(request.getServings());
-    recipe.setInstructions(request.getInstructions());
-    recipe.setHealthLabel(request.getHealthLabel());
-    recipeRepository.save(recipe);
-    return CommandResponseDTO.builder().id(recipe.getId()).build();
+    recipeEntity.setTitle(capitalizeFully(request.getTitle()));
+    recipeEntity.setDescription(request.getDescription());
+    recipeEntity.setPrepTime(request.getPrepTime());
+    recipeEntity.setCookTime(request.getCookTime());
+    recipeEntity.setServings(request.getServings());
+    recipeEntity.setInstructions(request.getInstructions());
+    recipeEntity.setHealthLabel(request.getHealthLabel());
+    recipeRepository.save(recipeEntity);
+    return CommandResponseDTO.builder().id(recipeEntity.getId()).build();
   }
 
   /**
@@ -183,7 +184,7 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return
    */
   public void deleteById(Long id) {
-    final Recipe recipe =
+    final RecipeEntity recipeEntity =
         recipeRepository
             .findById(id)
             .orElseThrow(
@@ -191,7 +192,7 @@ public class RecipeServiceImpl implements IRecipeService {
                   log.error(Constants.NOT_FOUND_RECIPE);
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
-    recipeRepository.delete(recipe);
+    recipeRepository.delete(recipeEntity);
   }
 
   public List<RecipeResponseDTO> getRecipeByCategoryId(Long id) {
@@ -200,9 +201,7 @@ public class RecipeServiceImpl implements IRecipeService {
             recipe ->
                 new RecipeResponseDTO(
                     recipe,
-                    recipe.getRecipeIngredients().stream()
-                        .map(RecipeIngredientResponseDTO::new)
-                        .toList()))
+                    recipe.getRecipeItems().stream().map(RecipeItemResponseDTO::new).toList()))
         .toList();
   }
 }

@@ -12,7 +12,7 @@ import srinageswari.programmedhousehold.common.Constants;
 
 /**
  * @author smanickavasagam
- *     <p>Custom constraint annotation for IngredientValidator
+ *     <p>Custom constraint annotation for ItemValidator
  */
 @Documented
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
