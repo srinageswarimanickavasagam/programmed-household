@@ -15,7 +15,7 @@
 .settings/
 
 # BEGIN ideaJ files
-.idea
+../.idea
 .iml
 # END ideaJ files
 
@@ -24,7 +24,12 @@
 # END Gradle temp files
 war.gradle
 
-target
+/target
+*/target
+
+*/.mvn/
+
+.idea/
 
 # BEGIN Gradle build folder
 build

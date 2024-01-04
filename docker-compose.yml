@@ -13,10 +13,8 @@ services:
       springboot-mysql-net:
 
   app:
-    container_name: programmed-household
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    container_name: core-service
+    image: smanickavasa/core-service:latest
     ports:
       - "5000:5000"
     depends_on:
