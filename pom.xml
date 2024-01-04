@@ -15,6 +15,7 @@
         <module>search-service</module>
         <module>scheduler-service</module>
         <module>notification-service</module>
+        <module>service-registry</module>
     </modules>
 
     <name>programmed-household-app</name>
