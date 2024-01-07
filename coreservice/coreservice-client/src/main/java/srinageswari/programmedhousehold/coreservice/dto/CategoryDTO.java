@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import srinageswari.programmedhousehold.coreservice.enums.Day;
-import srinageswari.programmedhousehold.coreservice.enums.Meal;
 import srinageswari.programmedhousehold.coreservice.enums.Difficulty;
+import srinageswari.programmedhousehold.coreservice.enums.Meal;
 
 @Data
 @NoArgsConstructor

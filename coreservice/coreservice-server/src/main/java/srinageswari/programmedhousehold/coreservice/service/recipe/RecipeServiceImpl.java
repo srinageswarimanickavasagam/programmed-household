@@ -5,6 +5,7 @@ import static org.apache.commons.text.WordUtils.capitalizeFully;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,18 +14,15 @@ import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.ElementAlreadyExistsException;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
-import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
-import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
-import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
-import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
-import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
-import srinageswari.programmedhousehold.coreservice.model.RecipeItemEntity;
-import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
-import srinageswari.programmedhousehold.coreservice.repository.ItemtypeRepository;
-import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
+import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
+import srinageswari.programmedhousehold.coreservice.model.*;
+import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
+import srinageswari.programmedhousehold.coreservice.repository.ItemtypeRepository;
+import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
+import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
 
 /**
  * @author smanickavasagam
@@ -39,6 +37,9 @@ public class RecipeServiceImpl implements IRecipeService {
   private final RecipeMapper recipeMapper;
   private final AppUserServiceImpl appUserServiceImpl;
   private final ItemtypeRepository itemtypeRepository;
+
+  @Value("${app.security.enabled}")
+  private boolean isSecurityEnabled;
 
   /**
    * Fetches a recipe by the given id
@@ -88,7 +89,7 @@ public class RecipeServiceImpl implements IRecipeService {
     final RecipeEntity recipeEntity = recipeMapper.toEntity(request);
     recipeEntity.getRecipeItems().clear();
     request
-        .getRecipeItemDTOS()
+        .getRecipeItems()
         .forEach(
             recipeItemRequestDTO -> {
               final ItemEntity itemEntity;
@@ -132,7 +133,8 @@ public class RecipeServiceImpl implements IRecipeService {
                       recipeItemRequestDTO.getUnit(),
                       recipeItemRequestDTO.getItemQty()));
             });
-    recipeEntity.setAppUser(appUserServiceImpl.getCurrentLoggedInUser());
+    recipeEntity.setAppUser(
+        isSecurityEnabled ? appUserServiceImpl.getCurrentLoggedInUser() : new AppUserEntity(1L));
     recipeRepository.save(recipeEntity);
     return CommandResponseDTO.builder().id(recipeEntity.getId()).build();
   }

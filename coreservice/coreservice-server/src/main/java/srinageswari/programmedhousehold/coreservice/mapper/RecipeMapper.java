@@ -1,12 +1,10 @@
 package srinageswari.programmedhousehold.coreservice.mapper;
 
 import org.apache.commons.text.WordUtils;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.springframework.stereotype.Component;
-import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
+import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
 
 /**
  * @author smanickavasagam
@@ -14,14 +12,12 @@ import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
  */
 @Mapper(
     componentModel = "spring",
-    uses = {CategoryMapper.class, RecipeItemMapper.class})
+    uses = {CategoryMapper.class, RecipeItemMapper.class, AppUserMapper.class})
 @Component
 public interface RecipeMapper {
-
-  // RecipeMapper MAPPER = Mappers.getMapper(RecipeMapper.class);
-
   RecipeEntity toEntity(RecipeDTO dto);
 
+  @Mappings({@Mapping(target = "appUser", ignore = true)})
   RecipeDTO toDto(RecipeEntity entity);
 
   @AfterMapping

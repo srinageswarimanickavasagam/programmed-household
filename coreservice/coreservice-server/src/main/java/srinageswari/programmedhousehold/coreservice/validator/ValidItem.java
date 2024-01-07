@@ -8,7 +8,6 @@ import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 
 /**

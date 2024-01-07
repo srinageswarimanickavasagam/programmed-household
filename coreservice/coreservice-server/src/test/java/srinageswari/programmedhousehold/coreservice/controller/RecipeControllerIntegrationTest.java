@@ -18,10 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import srinageswari.programmedhousehold.BaseIntegrationTest;
+import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
 import srinageswari.programmedhousehold.coreservice.model.AppUserEntity;
 import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
-import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -33,8 +33,7 @@ public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
 
   @MockBean AppUserServiceImpl appUserServiceImpl;
 
-  @Autowired
-  RecipeMapper recipeMapper;
+  @Autowired RecipeMapper recipeMapper;
 
   @BeforeEach
   public void before() throws IOException {

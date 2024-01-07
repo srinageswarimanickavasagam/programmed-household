@@ -1,9 +1,9 @@
 package srinageswari.programmedhousehold.coreservice.mapper;
 
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 import org.springframework.stereotype.Component;
-import srinageswari.programmedhousehold.coreservice.model.RecipeItemEntity;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeItemDTO;
+import srinageswari.programmedhousehold.coreservice.model.RecipeItemEntity;
 
 /**
  * @author smanickavasagam
@@ -14,10 +14,8 @@ import srinageswari.programmedhousehold.coreservice.dto.RecipeItemDTO;
     uses = {ItemMapper.class})
 @Component
 public interface RecipeItemMapper {
-
-  // RecipeItemMapper MAPPER = Mappers.getMapper(RecipeItemMapper.class);
-
   RecipeItemEntity toEntity(RecipeItemDTO dto);
 
+  @Mappings({@Mapping(target = "recipe", ignore = true)})
   RecipeItemDTO toDto(RecipeItemEntity entity);
 }
