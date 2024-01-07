@@ -5,7 +5,7 @@
 	<artifactId>eventhandler-client</artifactId>
 
 	<parent>
-		<groupId>srinageswari.programmedhousehold.eventhandler</groupId>
+		<groupId>srinageswari.programmedhousehold</groupId>
 		<artifactId>eventhandler</artifactId>
 		<version>1.0.0.RELEASE</version>
 	</parent>

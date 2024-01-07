@@ -5,7 +5,7 @@
 	<artifactId>scheduler-client</artifactId>
 
 	<parent>
-		<groupId>srinageswari.programmedhousehold.scheduler</groupId>
+		<groupId>srinageswari.programmedhousehold</groupId>
 		<artifactId>scheduler</artifactId>
 		<version>1.0.0.RELEASE</version>
 	</parent>

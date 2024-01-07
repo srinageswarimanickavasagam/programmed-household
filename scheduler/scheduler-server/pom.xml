@@ -5,14 +5,14 @@
 	<artifactId>scheduler-server</artifactId>
 
 	<parent>
-		<groupId>srinageswari.programmedhousehold.scheduler</groupId>
+		<groupId>srinageswari.programmedhousehold</groupId>
 		<artifactId>scheduler</artifactId>
 		<version>1.0.0.RELEASE</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>srinageswari.programmedhousehold.scheduler</groupId>
+			<groupId>srinageswari.programmedhousehold</groupId>
 			<artifactId>scheduler-client</artifactId>
 			<version>1.0.0.RELEASE</version>
 			<scope>compile</scope>

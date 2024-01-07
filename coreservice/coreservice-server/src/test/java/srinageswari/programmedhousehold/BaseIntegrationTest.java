@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
-import srinageswari.programmedhousehold.coreservice.server.controller.AbstractContainerBaseTest;
-import srinageswari.programmedhousehold.coreservice.server.model.AppUserEntity;
-import srinageswari.programmedhousehold.coreservice.server.model.CategoryEntity;
-import srinageswari.programmedhousehold.coreservice.server.model.ItemEntity;
-import srinageswari.programmedhousehold.coreservice.server.model.ItemtypeEntity;
-import srinageswari.programmedhousehold.coreservice.server.repository.*;
+import srinageswari.programmedhousehold.coreservice.controller.AbstractContainerBaseTest;
+import srinageswari.programmedhousehold.coreservice.model.AppUserEntity;
+import srinageswari.programmedhousehold.coreservice.model.CategoryEntity;
+import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
+import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
+import srinageswari.programmedhousehold.coreservice.repository.*;
 
 @SpringBootTest
 @Transactional
@@ -20,15 +20,20 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
 
   @Autowired RecipeItemRepository recipeItemRepository;
 
-  @Autowired RecipeRepository recipeRepository;
+  @Autowired
+  RecipeRepository recipeRepository;
 
-  @Autowired CategoryRepository categoryRepository;
+  @Autowired
+  CategoryRepository categoryRepository;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
-  @Autowired ItemtypeRepository itemtypeRepository;
+  @Autowired
+  ItemtypeRepository itemtypeRepository;
 
-  @Autowired ItemRepository itemRepository;
+  @Autowired
+  ItemRepository itemRepository;
 
   private final String filePath = "data/integrationtest/";
 
