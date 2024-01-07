@@ -58,7 +58,7 @@ public class RecipeDTO {
   private AppUserDTO appUser;
 
   @JsonProperty("recipeItems")
-  private List<RecipeItemDTO> recipeItemDTOS;
+  private List<RecipeItemDTO> recipeItems;
 
   @JsonProperty("scheduledAt")
   private Date scheduledAt;

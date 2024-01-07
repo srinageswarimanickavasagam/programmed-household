@@ -20,20 +20,15 @@ public class BaseIntegrationTest extends AbstractContainerBaseTest {
 
   @Autowired RecipeItemRepository recipeItemRepository;
 
-  @Autowired
-  RecipeRepository recipeRepository;
+  @Autowired RecipeRepository recipeRepository;
 
-  @Autowired
-  CategoryRepository categoryRepository;
+  @Autowired CategoryRepository categoryRepository;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  ItemtypeRepository itemtypeRepository;
+  @Autowired ItemtypeRepository itemtypeRepository;
 
-  @Autowired
-  ItemRepository itemRepository;
+  @Autowired ItemRepository itemRepository;
 
   private final String filePath = "data/integrationtest/";
 
