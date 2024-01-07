@@ -1,9 +1,0 @@
-{
-  "id": "1",
-  "name":"Chicken",
-  "itemStockQty":250,
-  "unit":"GRAM",
-  "stockedDt":"2023-12-28",
-  "itemtype": 1,
-  "essential": false
-}

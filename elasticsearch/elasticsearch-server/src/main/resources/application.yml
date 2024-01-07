@@ -45,6 +45,9 @@ app:
     enabled: false
   frontend:
     url: http://localhost:9000
+  elasticsearch:
+    host: localhost
+    port: 9200
 
 ---
 

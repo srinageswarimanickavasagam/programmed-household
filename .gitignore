@@ -27,6 +27,9 @@ war.gradle
 /target
 */target
 */*/target
+*/*/*/target
+eventhandler/eventhandler-server/target/
+elasticsearch/elasticsearch-server/target/
 
 */.mvn/
 

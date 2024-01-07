@@ -1,0 +1,29 @@
+{
+  "id": 2,
+  "title": "Regular Dosa",
+  "description": "Description for the recipe",
+  "category": {
+    "categoryId":2
+  },
+  "servings": 6,
+  "prepTime": 60,
+  "cookTime": 5,
+  "active": true,
+  "cuisine": "SOUTHINDIAN",
+  "healthLabel": "DEFAULT",
+  "instructions": "Directions for the recipe",
+  "recipeItems": [
+    {
+      "item" : {
+        "itemId": 2,
+        "name":"IdliRice",
+        "itemtype": {
+          "typeId": 2,
+          "type": "Rice"
+        }
+      },
+      "itemQty": 1,
+      "unit": "KILOGRAM"
+    }
+  ]
+}
