@@ -5,7 +5,7 @@
 	<artifactId>coreservice-client</artifactId>
 
 	<parent>
-		<groupId>srinageswari.programmedhousehold.coreservice</groupId>
+		<groupId>srinageswari.programmedhousehold</groupId>
 		<artifactId>coreservice</artifactId>
 		<version>1.0.0.RELEASE</version>
 	</parent>

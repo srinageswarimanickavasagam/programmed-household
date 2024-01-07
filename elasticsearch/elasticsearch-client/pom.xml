@@ -5,7 +5,7 @@
 	<artifactId>elasticsearch-client</artifactId>
 
 	<parent>
-		<groupId>srinageswari.programmedhousehold.elasticsearch</groupId>
+		<groupId>srinageswari.programmedhousehold</groupId>
 		<artifactId>elasticsearch</artifactId>
 		<version>1.0.0.RELEASE</version>
 	</parent>

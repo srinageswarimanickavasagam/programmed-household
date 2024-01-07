@@ -3,7 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>srinageswari.programmedhousehold.coreservice</groupId>
 	<artifactId>coreservice</artifactId>
 	<version>1.0.0.RELEASE</version>
 	<packaging>pom</packaging>
@@ -31,7 +30,7 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 <!--		<dependency>-->
-<!--			<groupId>srinageswari.programmedhousehold.elasticsearch</groupId>-->
+<!--			<groupId>srinageswari.programmedhousehold.eventhandler</groupId>-->
 <!--			<artifactId>elasticsearch-client</artifactId>-->
 <!--			<version>1.0.0.RELEASE</version>-->
 <!--			<scope>compile</scope>-->
