@@ -5,8 +5,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
-import srinageswari.programmedhousehold.coreservice.model.CategoryEntity;
 import srinageswari.programmedhousehold.coreservice.dto.CategoryDTO;
+import srinageswari.programmedhousehold.coreservice.model.CategoryEntity;
 
 /**
  * @author smanickavasagam
@@ -15,9 +15,6 @@ import srinageswari.programmedhousehold.coreservice.dto.CategoryDTO;
 @Mapper(componentModel = "spring")
 @Component
 public interface CategoryMapper {
-
-  // CategoryMapper MAPPER = Mappers.getMapper(CategoryMapper.class);
-
   CategoryEntity toEntity(CategoryDTO dto);
 
   CategoryDTO toDto(CategoryEntity entity);

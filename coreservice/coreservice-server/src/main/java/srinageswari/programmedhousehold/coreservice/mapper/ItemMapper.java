@@ -5,8 +5,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
-import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
+import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
 
 /**
  * @author smanickavasagam
@@ -17,9 +17,6 @@ import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
     uses = {ItemtypeMapper.class})
 @Component
 public interface ItemMapper {
-
-  // ItemMapper MAPPER = Mappers.getMapper(ItemMapper.class);
-
   ItemEntity toEntity(ItemDTO dto);
 
   ItemDTO toDto(ItemEntity entity);

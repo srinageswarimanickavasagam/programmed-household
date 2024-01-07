@@ -23,7 +23,7 @@ public class ItemBusinessValidator implements ConstraintValidator<ValidItem, Rec
   @Override
   public boolean isValid(RecipeDTO request, ConstraintValidatorContext context) {
     return areAllUnique(
-        request.getRecipeItemDTOS().stream()
+        request.getRecipeItems().stream()
             .map(recipeItemDTO -> recipeItemDTO.getItem().getName())
             .toList());
   }
