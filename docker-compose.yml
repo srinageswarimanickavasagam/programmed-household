@@ -1,30 +1,63 @@
-version: "3.8"
+version: "3.9"
 
 services:
   mysqldb:
     container_name: mysql
-    image: mysql
+    image: mysql:8.2.0
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: recipedb
-    networks:
-      springboot-mysql-net:
+      MYSQL_DATABASE: phdb
 
-  app:
-    container_name: core-service
-    image: smanickavasa/core-service:latest
+  es8:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
+    container_name: es8
+    environment:
+      - node.name=es8
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+    volumes:
+      - data:/usr/share/elasticsearch/data
     ports:
-      - "5000:5000"
-    depends_on:
-      - mysqldb
+      - 9200:9200
     networks:
-      springboot-mysql-net:
-    restart: on-failure
+      - ph
+
+  kib8:
+    image: docker.elastic.co/kibana/kibana:8.11.4
+    container_name: kib8
+    environment:
+      - node.name=kib8
+      - cluster.name=es-docker-cluster
+      - ELASTICSEARCH_HOSTS=http://es8:9200
+    ports:
+      - 5601:5601
+    networks:
+      - ph
+    depends_on:
+      - es8
+
+volumes:
+  data:
+    driver: local
 
 networks:
-  springboot-mysql-net:
+  ph:
+    driver: bridge
 
+
+
+#  app:
+#    container_name: core-service
+#    image: smanickavasa/core-service:latest
+#    ports:
+#      - '5000:5000'
+#    depends_on:
+#      - mysqldb
+#      - elasticsearch
+#    networks:
+#      ph-net:
+#    restart: on-failure
 
 #after pushing image to docker hub repository remove the build parameter under app service then add "image: smanickavasa/recipe-manager-app" similar to mysql service
