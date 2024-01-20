@@ -17,14 +17,14 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/recipedb?createDatabaseIfNotExist=true&useSSL=true
-    username: ${PH_DB_USERNAME}
-    password: ${PH_DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
     hibernate:
-    ddl-auto: create
+     ddl-auto: create
     show-sql: true
   security:
     ignored:
