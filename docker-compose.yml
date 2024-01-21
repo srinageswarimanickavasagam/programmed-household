@@ -1,63 +1,102 @@
-version: "3.9"
-
+version: '3.9'
 services:
-  mysqldb:
-    container_name: mysql
-    image: mysql:8.2.0
-    ports:
-      - '3306:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: phdb
-
-  es8:
+  es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
-    container_name: es8
+    container_name: es01
     environment:
-      - node.name=es8
+      - node.name=es01
       - cluster.name=es-docker-cluster
-      - discovery.type=single-node
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - data:/usr/share/elasticsearch/data
+      - data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
-      - ph
-
-  kib8:
-    image: docker.elastic.co/kibana/kibana:8.11.4
-    container_name: kib8
+      - ph-net
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
+    container_name: es02
     environment:
-      - node.name=kib8
+      - node.name=es02
       - cluster.name=es-docker-cluster
-      - ELASTICSEARCH_HOSTS=http://es8:9200
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - ph-net
+  kib01:
+    image: docker.elastic.co/kibana/kibana:8.11.4
+    container_name: kib01
     ports:
       - 5601:5601
-    networks:
-      - ph
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200"]'
     depends_on:
-      - es8
+      - es01
+      - es02
+    networks:
+      - ph-net
+  mysql-db:
+    image: container-registry.oracle.com/mysql/community-server:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: phdb
+      MYSQL_USER: phuser
+      MYSQL_PASSWORD: phpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ph-net
+    healthcheck:
+      test: [ "CMD", "/healthcheck.sh" ]
+      timeout: 5s
+      retries: 50
+  coreservice:
+    build:
+      context: ./coreservice/coreservice-server
+      dockerfile: Dockerfile
+    container_name: coreservice
+    ports:
+      - "5000:5000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/phdb
+      SPRING_DATASOURCE_USERNAME: phuser
+      SPRING_DATASOURCE_PASSWORD: phpassword
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - ph-net
 
 volumes:
-  data:
+  mysql-data: {}
+  data01:
+    driver: local
+  data02:
     driver: local
 
 networks:
-  ph:
+  ph-net:
     driver: bridge
-
-
-
-#  app:
-#    container_name: core-service
-#    image: smanickavasa/core-service:latest
-#    ports:
-#      - '5000:5000'
-#    depends_on:
-#      - mysqldb
-#      - elasticsearch
-#    networks:
-#      ph-net:
-#    restart: on-failure
-
-#after pushing image to docker hub repository remove the build parameter under app service then add "image: smanickavasa/recipe-manager-app" similar to mysql service

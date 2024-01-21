@@ -1,7 +1,7 @@
 ## Table of Contents
 
 1. [ElasticSearch](#elasticsearch)
-2. [How does it work](#how-does-it-work)
+2. [Architecture](#architecture)
 3. [Applications](#applications)
 4. [Elastic Stack](#elastic-stack-technologies-developed-by-the-company)
    1. [Kibana](#kibana-)
@@ -24,18 +24,80 @@
       1. [With Elasticsearch](#with-elasticsearch)
       2. [With Beats](#with-beats)
 6. [Setup](#elasticsearch--kibana-setup-using-docker)
-   1. [How to update elasticsearch.yml?](#how-to-disable-security-in-elasticsearchyml-file)
-   
 
 ## Elasticsearch
 - A search engine written in Java, built on Apache lucene
 
-## How does it work?
+## Architecture
+`Clusters > Nodes > Indices > Shards > Documents`
+### Node
+- A node refers to a running instance of Elasticsearch, which can be running on a physical or virtual machine, or within a Docker container, for instance.
+- To ensure that we can store many terabytes of data if we need to, we can run as many nodes as we want.
+- Each node will then store a part of our data.
+- A node refers to an instance of Elasticsearch and not a machine, so you can run any number of nodes on the same machine.
+- This means that on your development machine, you can start up five nodes if you want to, without having to deal with virtual machines or containers.
+- That being said, you should typically separate things in a production environment so that each node runs on a dedicated machine, a virtual machine, or within a container.
+- We can query node details in kibana console,
+  - we can get the node details by <br>
+  `GET /_nodes`
+### Cluster
+- An Elasticsearch cluster is a collection of related nodes, which are responsible for storing data.
+- We can have many clusters if we want to, but one is usually enough.
+- Elasticsearch cluster exposes a REST API, which is what we will be communicating with.
+- We can query cluster details in kibana console, 
+  - we can get the cluster health by <br>
+  `GET /_cluster/health`
+### Document
 - Data is stored as documents (similar to rows in relational databases)
 - A document's data is separated into fields (similar to columns in relational databases)
-- A document is a JSON object
+- A document is a JSON object 
 - These documents are created using rest APIs
-
+### Index
+- Every document within Elasticsearch, is stored within an index. 
+- When you index a document, the original JSON object that you sent to Elasticsearch is stored along with some metadata that Elasticsearch uses internally.
+- Index is a way to logically group together related documents.
+- An index may contain as many documents as you want, so there is no hard limit.
+- When we get to searching for data, you will see that we specify the index that we want to search for documents, meaning that search queries are actually run against indices.
+- Commands <br>
+`PUT /pages`
+### Shards
+- Sharding is a way to sub-divide an index into smaller pieces, each being a shard which is an Apache lucene index.
+- Sharding is done at the index level, and not at the cluster or node level.
+#### Why Sharding?
+- Sharding enables horizontal scaling, to be able to store more documents.
+- Improved performance through parallelization of queries increases the throughput of index
+#### How to configure?
+- By default, indices in elasticsearch > 7.0.0 created with single shards. 
+- To increase the number of shards, Split API is used. But this will again create a new index anyways.
+- To reduce the number of shards, there is a Shrink API.
+- Number of shards required depends on number of nodes within the cluster, the capacity of the nodes, the number of indices and their sizes, the number of queries run against the indices, etc.
+### Replicas
+- Replication works by creating copies of each of the shards that an index contains. 
+- These copies are referred to as replicas or replica shards.
+- Replica shards are never stored on the same node as their primary shard, so that if one node disappears, there will always be at least one copy of a shard's data available on a different node.
+#### Why Replicas?
+- What happens if the node where a shard is stored breaks down, i.e. has a disk failure? the data is lost, since we have no copy of it, since a hardware can fail at any given time.
+- So we need some fault tolerance and failover mechanism, which is where replication comes into the picture.
+#### How to configure?
+- A shard that has been replicated one or more times, is referred to as a primary shard.
+- A primary shard and its replica shards, are referred to as a replication group.
+- Replica shards are a complete copy of a shard that can serve search requests just like the primary shard.
+- When creating an index, we can choose how many replicas of each shard that we want, with one being the default value.
+- So an index contains shards, which in turn may contain replica shards.
+#### Snapshots
+- Replication is indeed a way of preventing data loss, but replication only works with "live data."
+- Snapshots, on the other hand, enable you to export the current state of the cluster (or specific indices) to a file.
+- This file can then be used to restore the state of the cluster or indices to that state.
+- Example
+  - For instance, imagine that we have been tasked to restructure how millions of documents are stored within an index.
+  - To be sure that we can recover from any implications, we snapshot the index before running the queries.
+  - When running the queries, the documents got messed up, and we need to revert the changes to get things back to a working state.
+  - Replication cannot help with that, because replication just ensures that we don't lose our latest data, which has already been modified in this example.
+  - Instead, we need to revert the state of the index to the snapshot that we took.
+### Replication vs Snapshot
+  - Snapshots are commonly used for daily backups and manual snapshots may be taken before applying changes to data, to roll back the changes in case something goes wrong.
+  - Replication just ensures that indices can recover from a node failure and keep serving requests, as if nothing had happened.
+  - Apart from preventing data loss, it can be used to increase the throughput of a given index.
 ## Applications
 - Analytics & full text search engine
 - Query & analyze structured data
@@ -44,12 +106,10 @@
 - Abnormality Detection (compare with kafka)
 
 ## Elastic Stack (Technologies developed by the company)
-
 - Elasticsearch is at the center which is used to search, analyze and store data.
 - Ingesting data into Elasticsearch can be done with Beats and/or Logstash, but also through elasticsearch's API.
 - Kibana is a user interface to visualize the data that it retrieves from Elasticsearch through the API.
 - X-Pack enables additional features, such as Management of Logstash pipeline in kibana.
-
 ### Kibana 
   - An analytics & visualization platform - Elasticsearch dashboard - A web interface to the data that is stored within Elasticsearch.
   - We can plot website traffic based on visitors in real time
