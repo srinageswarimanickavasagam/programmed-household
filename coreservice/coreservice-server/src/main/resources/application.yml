@@ -20,11 +20,14 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+  flyway:
+    url: ${SPRING_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    locations: classpath:db/migration
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
-    generate-ddl: true
     hibernate:
-     ddl-auto: create
+     ddl-auto: ${SPRING_DATASOURCE_HIKARI_DDL_AUTO}
     show-sql: true
   security:
     ignored:
@@ -52,24 +55,23 @@ spring:
     activate:
       on-profile: prod
 
-datasource:
-  url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
-  username: ${RDS_USERNAME}
-  password: ${RDS_PASSWORD}
-  driver-class-name: com.mysql.cj.jdbc.Driver
-jpa:
-  database-platform: org.hibernate.dialect.MySQL8Dialect
-  hibernate:
-  ddl-auto: create
-  show-sql: true
-security:
-  oauth2:
-    client:
-      registration:
-        google:
-          clientId: "${GOOGLE_CLIENT_ID}"
-          clientSecret: "${GOOGLE_CLIENT_SECRET}"
-          callbackUrl: http://localhost:5000/login/oauth2/code/google
+  datasource:
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: "${GOOGLE_CLIENT_ID}"
+            clientSecret: "${GOOGLE_CLIENT_SECRET}"
+            callbackUrl: http://localhost:5000/login/oauth2/code/google
 app:
   security:
     enabled: true

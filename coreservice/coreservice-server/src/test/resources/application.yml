@@ -19,6 +19,8 @@ spring:
         hbm2ddl:
           auto: create
         show_sql: true
+  flyway:
+    enabled: false
 
 app:
   security:
