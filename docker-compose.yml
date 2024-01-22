@@ -56,13 +56,13 @@ services:
     networks:
       - ph-net
   mysql-db:
-    image: container-registry.oracle.com/mysql/community-server:8.0
+    image: container-registry.oracle.com/mysql/community-server:8.2
     container_name: mysql-db
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: phdb
+      MYSQL_DATABASE: programmedhousehold
       MYSQL_USER: phuser
       MYSQL_PASSWORD: phpassword
     volumes:
@@ -81,9 +81,10 @@ services:
     ports:
       - "5000:5000"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/phdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/programmedhousehold
       SPRING_DATASOURCE_USERNAME: phuser
       SPRING_DATASOURCE_PASSWORD: phpassword
+      SPRING_DATASOURCE_HIKARI_DDL_AUTO: none
     depends_on:
       mysql-db:
         condition: service_healthy

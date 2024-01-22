@@ -9,7 +9,7 @@
   "prepTime": 30,
   "cookTime": 30,
   "active": true,
-  "cuisine": "SOUTHINDIAN",
+  "cuisine": "INDIAN",
   "healthLabel": "DEFAULT",
   "instructions": "Directions for the recipe",
   "recipeItems": [
