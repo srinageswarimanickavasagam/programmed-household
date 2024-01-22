@@ -9,8 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Cuisine {
-  SOUTHINDIAN("South-Indian"),
   EUROPEAN("European"),
-  NORTHINDIAN("North-Indian");
+  INDIAN("Indian");
   private String label;
 }

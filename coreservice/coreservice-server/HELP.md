@@ -1,14 +1,13 @@
-# Read Me First
-The following was discovered as part of building this project:
+# TO DO
 
-* The original package name 'srinageswari.programmedhousehold.elastic-server' is invalid and this project uses 'srinageswari.programmedhousehold.elasticserver' instead.
+## Add flyway 
 
-# Getting Started
+## File name syntax
+https://blog.tericcabrel.com/handle-database-migrations-in-a-springboot-application-with-flyway/
+![Local Image](src/main/resources/images/flyway_filename.png)
 
-### Reference Documentation
-For further reference, please consider the following sections:
-
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.1/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.1/maven-plugin/reference/html/#build-image)
-
+- Part 1: It is the letter "v" in uppercase. The name always starts with this letter.
+- Part 2: It is the migration version; it can be 1, 001,  1.2.3, 2021.09.24.12.55.32, ... you got it.
+- Part 3: It is the two underscores (_)
+- Part 4: The description of the migration; you can separate words with an underscore or a space.
+- Part 5: It is the extension of the file .sql
