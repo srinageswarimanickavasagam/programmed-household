@@ -21,8 +21,8 @@ public class RecipeDTO {
   @Size(min = 3, max = 50)
   private String title;
 
-  @JsonProperty("description")
-  private String description;
+  @JsonProperty("reference")
+  private String reference;
 
   @JsonProperty("prepTime")
   private Integer prepTime;
@@ -37,10 +37,8 @@ public class RecipeDTO {
   private Integer servings;
 
   @JsonProperty("instructions")
-  @NotBlank
   private String instructions;
 
-  @NotNull
   @JsonProperty("healthLabel")
   private HealthLabel healthLabel;
 
@@ -62,4 +60,7 @@ public class RecipeDTO {
 
   @JsonProperty("scheduledAt")
   private Date scheduledAt;
+
+  @JsonProperty("notes")
+  private String notes;
 }

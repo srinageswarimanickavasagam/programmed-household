@@ -12,11 +12,12 @@ public enum Unit {
   KILOGRAM("kg"),
   GRAM("g"),
   MILLILITER("ml"),
-  LITER("l"),
+  LITRE("l"),
   TEASPOON("tsp"),
   TABLESPOON("tbsp"),
   CUP("cup"),
-  COUNT("count");
+  COUNT("count"),
+  PACK("pack");
 
   private String label;
 }

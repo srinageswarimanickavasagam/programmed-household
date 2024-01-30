@@ -18,7 +18,7 @@ import lombok.Setter;
 @Embeddable
 public class RecipeItemId implements Serializable {
 
-  @Column(name = "recipe_id", nullable = false)
+  @Column(name = "recipe_id", nullable = false, columnDefinition = "bigint UNSIGNED")
   private Long recipeId;
 
   @Column(name = "item_id", nullable = false)

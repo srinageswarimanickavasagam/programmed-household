@@ -2,16 +2,14 @@ package srinageswari.programmedhousehold.coreservice.model;
 
 import jakarta.persistence.*;
 import java.util.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import srinageswari.programmedhousehold.coreservice.enums.Cuisine;
 import srinageswari.programmedhousehold.coreservice.enums.HealthLabel;
 
 /**
  * @author smanickavasagam
  */
+@ToString
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,14 +19,16 @@ import srinageswari.programmedhousehold.coreservice.enums.HealthLabel;
 public class RecipeEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(
+      name = "id",
+      columnDefinition = "bigint UNSIGNED DEFAULT (CONV(SUBSTR(UUID(), 1, 16), 16, 10))")
   private Long id;
 
   @Column(nullable = false, length = 50, unique = true)
   private String title;
 
   @Column(length = 100)
-  private String description;
+  private String reference;
 
   private Integer prepTime;
 
@@ -62,6 +62,8 @@ public class RecipeEntity {
 
   private boolean isActive;
 
+  private String notes;
+
   public void addRecipeItem(RecipeItemEntity recipeItemEntity) {
     recipeItems.add(recipeItemEntity);
     recipeItemEntity.setRecipe(this);
@@ -79,7 +81,7 @@ public class RecipeEntity {
   public RecipeEntity(
       Long id,
       String title,
-      String description,
+      String reference,
       Integer prepTime,
       Integer cookTime,
       Integer servings,
@@ -89,7 +91,7 @@ public class RecipeEntity {
       boolean isActive) {
     this.id = id;
     this.title = title;
-    this.description = description;
+    this.reference = reference;
     this.prepTime = prepTime;
     this.cookTime = cookTime;
     this.servings = servings;

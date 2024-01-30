@@ -3,6 +3,7 @@ package srinageswari.programmedhousehold.coreservice.service.recipe;
 import static org.apache.commons.text.WordUtils.capitalizeFully;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,7 @@ public class RecipeServiceImpl implements IRecipeService {
   private final RecipeMapper recipeMapper;
   private final AppUserServiceImpl appUserServiceImpl;
   private final ItemtypeRepository itemtypeRepository;
+  private final ElasticsearchService elasticsearchService;
 
   @Value("${app.security.enabled}")
   private boolean isSecurityEnabled;
@@ -131,12 +133,15 @@ public class RecipeServiceImpl implements IRecipeService {
                       recipeEntity,
                       itemEntity,
                       recipeItemRequestDTO.getUnit(),
-                      recipeItemRequestDTO.getItemQty()));
+                      recipeItemRequestDTO.getRequiredQty(),
+                      recipeItemRequestDTO.getCulinaryStep()));
             });
     recipeEntity.setAppUser(
         isSecurityEnabled ? appUserServiceImpl.getCurrentLoggedInUser() : new AppUserEntity(1L));
-    recipeRepository.save(recipeEntity);
-    return CommandResponseDTO.builder().id(recipeEntity.getId()).build();
+    recipeEntity.setId(uuidToLong(UUID.randomUUID()));
+    RecipeEntity recipe = recipeRepository.save(recipeEntity);
+    String json = elasticsearchService.saveToElasticsearch(recipe);
+    return CommandResponseDTO.builder().id(recipe.getId()).response(json).build();
   }
 
   /**
@@ -157,7 +162,7 @@ public class RecipeServiceImpl implements IRecipeService {
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
     recipeEntity.setTitle(capitalizeFully(request.getTitle()));
-    recipeEntity.setDescription(request.getDescription());
+    recipeEntity.setReference(request.getReference());
     recipeEntity.setPrepTime(request.getPrepTime());
     recipeEntity.setCookTime(request.getCookTime());
     recipeEntity.setServings(request.getServings());
@@ -187,5 +192,13 @@ public class RecipeServiceImpl implements IRecipeService {
 
   public List<RecipeDTO> getRecipeByCategoryId(Long id) {
     return recipeRepository.findrecipesByCategoryId(id).stream().map(recipeMapper::toDto).toList();
+  }
+
+  public static Long uuidToLong(UUID uuid) {
+    long mostSigBits = uuid.getMostSignificantBits();
+    long leastSigBits = uuid.getLeastSignificantBits();
+
+    // Combine the most and least significant bits to create a long value
+    return (mostSigBits & Long.MAX_VALUE) ^ (leastSigBits & Long.MAX_VALUE);
   }
 }

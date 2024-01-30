@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum Difficulty {
   EASY("Easy"),
   MODERATE("Moderate"),
-  HARD("Hard");
+  HARD("Hard"),
+  NA("Not Applicable");
 
   private String label;
 }
