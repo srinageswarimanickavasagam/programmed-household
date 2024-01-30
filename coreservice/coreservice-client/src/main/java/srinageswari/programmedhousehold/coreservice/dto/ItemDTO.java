@@ -2,6 +2,7 @@ package srinageswari.programmedhousehold.coreservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,9 @@ public class ItemDTO {
   @JsonProperty("itemStockQty")
   private int itemStockQty;
 
+  @JsonProperty("amount")
+  private BigDecimal amount;
+
   @JsonProperty("unit")
   private Unit unit;
 
@@ -37,4 +41,7 @@ public class ItemDTO {
 
   @JsonProperty("essential")
   private boolean essential;
+
+  @JsonProperty("refill")
+  private int refill;
 }

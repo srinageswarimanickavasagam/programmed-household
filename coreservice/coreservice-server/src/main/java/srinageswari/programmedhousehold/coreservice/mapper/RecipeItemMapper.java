@@ -14,6 +14,16 @@ import srinageswari.programmedhousehold.coreservice.model.RecipeItemEntity;
     uses = {ItemMapper.class})
 @Component
 public interface RecipeItemMapper {
+
+  @Mappings({
+    @Mapping(target = "recipe", ignore = true), // Ignore the recipe property during mapping
+    @Mapping(
+        target = "recipeItemId.recipeId",
+        source = "dto.recipe.id"), // Map the recipeId property of RecipeItemId
+    @Mapping(
+        target = "recipeItemId.itemId",
+        source = "dto.item.id") // Map the itemId property of RecipeItemId
+  })
   RecipeItemEntity toEntity(RecipeItemDTO dto);
 
   @Mappings({@Mapping(target = "recipe", ignore = true)})

@@ -68,7 +68,12 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
     // already defined and unit is selected from the list)
     final RecipeEntity recipeEntity = new RecipeEntity(request.getRecipe().getId());
     final RecipeItemEntity recipeItemEntity =
-        new RecipeItemEntity(recipeEntity, itemEntity, request.getUnit(), request.getItemQty());
+        new RecipeItemEntity(
+            recipeEntity,
+            itemEntity,
+            request.getUnit(),
+            request.getRequiredQty(),
+            request.getCulinaryStep());
 
     recipeItemRepository.save(recipeItemEntity);
     return CommandResponseDTO.builder().id(recipeItemEntity.getRecipe().getId()).build();

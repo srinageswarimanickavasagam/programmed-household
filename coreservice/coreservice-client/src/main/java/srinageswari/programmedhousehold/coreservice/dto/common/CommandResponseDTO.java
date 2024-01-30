@@ -13,4 +13,5 @@ import lombok.Value;
 @Builder
 public class CommandResponseDTO {
   Long id;
+  String response;
 }
