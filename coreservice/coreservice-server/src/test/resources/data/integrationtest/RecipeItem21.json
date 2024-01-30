@@ -2,7 +2,7 @@
   "recipeId": 2,
   "itemId": 0,
   "itemName": "Urad dal",
-  "itemQty": 250,
+  "requiredQty": 250,
   "unit": "GRAM",
   "type": "Dal"
 }

@@ -1,6 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -36,11 +37,13 @@ public class ItemEntity {
 
   private int itemStockQty;
 
-  private float amount;
+  private BigDecimal amount;
 
   private Date stockedDt;
 
   private boolean isEssential;
+
+  private int refill;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
   private Set<RecipeItemEntity> recipeItems = new HashSet<>();

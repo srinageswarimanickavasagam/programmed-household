@@ -15,7 +15,8 @@ public enum Day {
   WEDNESDAY("Wednesday"),
   THURSDAY("Thursday"),
   FRIDAY("Friday"),
-  SATURDAY("Saturday");
+  SATURDAY("Saturday"),
+  NA("Not applicable");
 
   private String label;
 }

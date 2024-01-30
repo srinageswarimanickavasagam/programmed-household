@@ -1,7 +1,7 @@
 {
   "id": 1,
   "title": "Chicken Biryani",
-  "description": "Description for the recipe",
+  "reference": "Description for the recipe",
   "category": {
     "categoryId":1
   },
@@ -22,7 +22,8 @@
           "type": "Meat&Poultry"
         }
       },
-      "itemQty": 200,
+      "culinaryStep": "MARINATE",
+      "requiredQty": 200,
       "unit": "GRAM"
     }
   ]

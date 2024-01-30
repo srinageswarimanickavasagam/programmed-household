@@ -15,6 +15,8 @@ import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
     uses = {CategoryMapper.class, RecipeItemMapper.class, AppUserMapper.class})
 @Component
 public interface RecipeMapper {
+
+  @Mapping(target = "recipeItems", source = "dto.recipeItems") // Map the recipeItems property
   RecipeEntity toEntity(RecipeDTO dto);
 
   @Mappings({@Mapping(target = "appUser", ignore = true)})
