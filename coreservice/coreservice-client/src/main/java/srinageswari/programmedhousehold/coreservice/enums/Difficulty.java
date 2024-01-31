@@ -14,5 +14,5 @@ public enum Difficulty {
   HARD("Hard"),
   NA("Not Applicable");
 
-  private String label;
+  private final String label;
 }

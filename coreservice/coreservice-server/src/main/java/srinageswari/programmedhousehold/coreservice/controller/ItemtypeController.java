@@ -3,7 +3,7 @@ package srinageswari.programmedhousehold.coreservice.controller;
 import static srinageswari.programmedhousehold.coreservice.common.Constants.SUCCESS;
 
 import jakarta.validation.Valid;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class ItemtypeController {
   @GetMapping("/itemtype/{id}")
   public ResponseEntity<APIResponseDTO<ItemtypeDTO>> findById(@PathVariable long id) {
     final ItemtypeDTO response = itemtypeService.findById(id);
-    return ResponseEntity.ok(new APIResponseDTO<>(Instant.now().toEpochMilli(), SUCCESS, response));
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
   }
 
   /**
@@ -47,7 +47,7 @@ public class ItemtypeController {
   public ResponseEntity<APIResponseDTO<Page<ItemtypeDTO>>> findAll(
       @RequestBody SearchRequestDTO request) {
     final Page<ItemtypeDTO> response = itemtypeService.findAll(request);
-    return ResponseEntity.ok(new APIResponseDTO<>(Instant.now().toEpochMilli(), SUCCESS, response));
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
   }
 
   /**
@@ -60,7 +60,7 @@ public class ItemtypeController {
       @Valid @RequestBody ItemtypeDTO request) {
     final CommandResponseDTO response = itemtypeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(Instant.now().toEpochMilli(), SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
   }
 
   /**
@@ -72,7 +72,7 @@ public class ItemtypeController {
   public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
       @Valid @RequestBody ItemtypeDTO request) {
     final CommandResponseDTO response = itemtypeService.update(request);
-    return ResponseEntity.ok(new APIResponseDTO<>(Instant.now().toEpochMilli(), SUCCESS, response));
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
   }
 
   /**

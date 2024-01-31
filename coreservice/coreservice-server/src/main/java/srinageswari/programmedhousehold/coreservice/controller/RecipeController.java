@@ -1,7 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.controller;
 
 import jakarta.validation.Valid;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,7 @@ public class RecipeController {
   public ResponseEntity<APIResponseDTO<RecipeDTO>> findById(@PathVariable long id) {
     final RecipeDTO response = recipeService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -52,7 +52,7 @@ public class RecipeController {
       @RequestBody SearchRequestDTO request) {
     final Page<RecipeDTO> response = recipeService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -65,7 +65,20 @@ public class RecipeController {
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
     final CommandResponseDTO response = recipeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+  }
+
+  /**
+   * Creates bulk recipes
+   *
+   * @return size of the created recipe
+   */
+  @PostMapping("/bulkinsert/recipes")
+  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> bulkInsert(
+      @RequestBody List<RecipeDTO> recipeDTOS) {
+    final CommandResponseDTO response = recipeService.bulkInsert(recipeDTOS);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -78,7 +91,7 @@ public class RecipeController {
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
     final CommandResponseDTO response = recipeService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -96,6 +109,6 @@ public class RecipeController {
   public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> search(@PathVariable long category_id) {
     final List<RecipeDTO> response = recipeService.getRecipeByCategoryId(category_id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 }

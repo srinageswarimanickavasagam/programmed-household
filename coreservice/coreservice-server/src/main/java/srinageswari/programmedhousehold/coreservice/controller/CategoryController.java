@@ -1,6 +1,6 @@
 package srinageswari.programmedhousehold.coreservice.controller;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class CategoryController {
   public ResponseEntity<APIResponseDTO<CategoryDTO>> findById(@PathVariable long id) {
     final CategoryDTO response = categoryService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -49,7 +49,7 @@ public class CategoryController {
       @RequestBody SearchRequestDTO request) {
     final Page<CategoryDTO> response = categoryService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -62,7 +62,7 @@ public class CategoryController {
       @RequestBody CategoryDTO request) {
     final CommandResponseDTO response = categoryService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -75,7 +75,7 @@ public class CategoryController {
       @RequestBody CategoryDTO request) {
     final CommandResponseDTO response = categoryService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
