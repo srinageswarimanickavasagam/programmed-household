@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
-import srinageswari.programmedhousehold.coreservice.common.exception.helper.ElementAlreadyExistsException;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
@@ -24,6 +23,7 @@ import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
 import srinageswari.programmedhousehold.coreservice.repository.ItemtypeRepository;
 import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
+import srinageswari.programmedhousehold.coreservice.service.recipeitem.RecipeItemServiceImpl;
 
 /**
  * @author smanickavasagam
@@ -39,6 +39,7 @@ public class RecipeServiceImpl implements IRecipeService {
   private final AppUserServiceImpl appUserServiceImpl;
   private final ItemtypeRepository itemtypeRepository;
   private final ElasticsearchService elasticsearchService;
+  private final RecipeItemServiceImpl recipeItemServiceImpl;
 
   @Value("${app.security.enabled}")
   private boolean isSecurityEnabled;
@@ -88,60 +89,16 @@ public class RecipeServiceImpl implements IRecipeService {
    */
   @Transactional
   public CommandResponseDTO create(RecipeDTO request) {
-    final RecipeEntity recipeEntity = recipeMapper.toEntity(request);
-    recipeEntity.getRecipeItems().clear();
-    request
-        .getRecipeItems()
-        .forEach(
-            recipeItemRequestDTO -> {
-              final ItemEntity itemEntity;
-              if (recipeItemRequestDTO.getItem().getId() != 0) {
-                itemEntity =
-                    itemRepository
-                        .findById(recipeItemRequestDTO.getItem().getId())
-                        .orElseThrow(
-                            () -> {
-                              log.error(Constants.NOT_FOUND_ITEM);
-                              return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
-                            });
-              } else {
-                // check if the new item is already defined before
-                if (itemRepository.existsByNameIgnoreCase(
-                    recipeItemRequestDTO.getItem().getName())) {
-                  log.error(
-                      String.format(
-                          Constants.ALREADY_EXISTS_ITEM, recipeItemRequestDTO.getItem().getId()));
-                  throw new ElementAlreadyExistsException(
-                      String.format(
-                          Constants.ALREADY_EXISTS_ITEM, recipeItemRequestDTO.getItem().getId()));
-                }
-                ItemtypeEntity itemtype =
-                    itemtypeRepository.findByType(
-                        recipeItemRequestDTO.getItem().getItemtype().getType());
-                if (null == itemtype) {
-                  itemtype =
-                      itemtypeRepository.save(
-                          new ItemtypeEntity(
-                              0L, recipeItemRequestDTO.getItem().getItemtype().getType()));
-                }
-                itemEntity =
-                    itemRepository.save(
-                        new ItemEntity(0L, recipeItemRequestDTO.getItem().getName(), itemtype));
-              }
-              recipeEntity.addRecipeItem(
-                  new RecipeItemEntity(
-                      recipeEntity,
-                      itemEntity,
-                      recipeItemRequestDTO.getUnit(),
-                      recipeItemRequestDTO.getRequiredQty(),
-                      recipeItemRequestDTO.getCulinaryStep()));
-            });
-    recipeEntity.setAppUser(
-        isSecurityEnabled ? appUserServiceImpl.getCurrentLoggedInUser() : new AppUserEntity(1L));
-    recipeEntity.setId(uuidToLong(UUID.randomUUID()));
-    RecipeEntity recipe = recipeRepository.save(recipeEntity);
+    RecipeEntity recipe = recipeRepository.save(constructRecipeEntity(request));
     String json = elasticsearchService.saveToElasticsearch(recipe);
     return CommandResponseDTO.builder().id(recipe.getId()).response(json).build();
+  }
+
+  @Transactional
+  public CommandResponseDTO bulkInsert(List<RecipeDTO> recipeDTOList) {
+    List<RecipeEntity> entities = recipeDTOList.stream().map(this::constructRecipeEntity).toList();
+    List<RecipeEntity> response = recipeRepository.saveAll(entities);
+    return CommandResponseDTO.builder().size(response.size()).build();
   }
 
   /**
@@ -192,6 +149,26 @@ public class RecipeServiceImpl implements IRecipeService {
 
   public List<RecipeDTO> getRecipeByCategoryId(Long id) {
     return recipeRepository.findrecipesByCategoryId(id).stream().map(recipeMapper::toDto).toList();
+  }
+
+  public RecipeEntity constructRecipeEntity(RecipeDTO request) {
+    final RecipeEntity recipeEntity = recipeMapper.toEntity(request);
+    recipeEntity.getRecipeItems().clear();
+    request
+        .getRecipeItems()
+        .forEach(
+            recipeItemDTO ->
+                recipeEntity.addRecipeItem(
+                    new RecipeItemEntity(
+                        recipeEntity,
+                        recipeItemServiceImpl.processRecipeItem(recipeItemDTO),
+                        recipeItemDTO.getUnit(),
+                        recipeItemDTO.getRequiredQty(),
+                        recipeItemDTO.getCulinaryStep())));
+    recipeEntity.setAppUser(
+        isSecurityEnabled ? appUserServiceImpl.getCurrentLoggedInUser() : new AppUserEntity(1L));
+    recipeEntity.setId(uuidToLong(UUID.randomUUID()));
+    return recipeEntity;
   }
 
   public static Long uuidToLong(UUID uuid) {

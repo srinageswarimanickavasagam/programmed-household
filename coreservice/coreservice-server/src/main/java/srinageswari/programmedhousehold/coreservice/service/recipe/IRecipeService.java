@@ -16,6 +16,8 @@ public interface IRecipeService {
 
   public CommandResponseDTO create(RecipeDTO request);
 
+  public CommandResponseDTO bulkInsert(List<RecipeDTO> recipeDTOList);
+
   public CommandResponseDTO update(RecipeDTO request);
 
   List<RecipeDTO> getRecipeByCategoryId(Long id);

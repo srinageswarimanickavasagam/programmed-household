@@ -20,25 +20,27 @@ public class ElasticsearchService {
 
   private String convertDataToJsonString(RecipeEntity recipe) {
     ObjectNode jsonObject = new ObjectMapper().createObjectNode();
-    jsonObject.put("RecipeId", recipe.getId());
-    jsonObject.put("Title", recipe.getTitle());
-    jsonObject.put("Reference", recipe.getReference());
-    jsonObject.put("PrepTime", recipe.getPrepTime());
-    jsonObject.put("CookTime", recipe.getCookTime());
-    jsonObject.put("Instructions", recipe.getInstructions());
+    jsonObject.put("recipe_id", recipe.getId());
+    jsonObject.put("title", recipe.getTitle());
+    jsonObject.put("reference", recipe.getReference());
+    jsonObject.put("prep_time", recipe.getPrepTime());
+    jsonObject.put("cook_time", recipe.getCookTime());
+    jsonObject.put("instructions", recipe.getInstructions());
     jsonObject.put(
-        "HealthLabel", recipe.getHealthLabel() != null ? recipe.getHealthLabel().getLabel() : null);
-    jsonObject.put("Cuisine", recipe.getCuisine().getLabel());
-    jsonObject.put("Category", recipe.getCategory().getName());
-    jsonObject.put("Meal", recipe.getCategory().getMeal().getLabel());
+        "health_label",
+        recipe.getHealthLabel() != null ? recipe.getHealthLabel().getLabel() : null);
+    jsonObject.put("cuisine", recipe.getCuisine().getLabel());
+    jsonObject.put("category", recipe.getCategory().getName());
+    jsonObject.put("meal", recipe.getCategory().getMeal().getLabel());
     jsonObject.put(
-        "ScheduleDay",
+        "schedule_day",
         recipe.getCategory().getDay() != null ? recipe.getCategory().getDay().getLabel() : null);
-    jsonObject.put("Difficulty", recipe.getCategory().getDifficulty().getLabel());
-    jsonObject.put("Side-dish", recipe.getCategory().isSidedish());
+    jsonObject.put("difficulty", recipe.getCategory().getDifficulty().getLabel());
+    jsonObject.put("side_dish", recipe.getCategory().isSidedish());
     jsonObject.put(
-        "ScheduledOn", recipe.getScheduledDt() != null ? recipe.getScheduledDt().toString() : null);
-    jsonObject.put("Notes", recipe.getNotes());
+        "scheduled_on",
+        recipe.getScheduledDt() != null ? recipe.getScheduledDt().toString() : null);
+    jsonObject.put("notes", recipe.getNotes());
 
     ObjectNode allIngredients = JsonNodeFactory.instance.objectNode();
 
@@ -53,11 +55,11 @@ public class ElasticsearchService {
               recipeItem -> {
                 recipeItemJsonObject.put(
                     recipeItem.getItem().getName(),
-                    recipeItem.getRequiredQty().toString() + recipeItem.getUnit());
+                    recipeItem.getRequiredQty().toString() + recipeItem.getUnit().getLabel());
               });
-          allIngredients.set(culinaryStep.name(), recipeItemJsonObject);
+          allIngredients.set(culinaryStep.getLabel(), recipeItemJsonObject);
         });
-    jsonObject.set("Ingredients", allIngredients);
+    jsonObject.set("ingredients", allIngredients);
     return jsonObject.toString();
   }
 }

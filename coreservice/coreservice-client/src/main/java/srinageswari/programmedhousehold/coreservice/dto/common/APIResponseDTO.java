@@ -1,5 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,11 +14,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class APIResponseDTO<T> {
 
-  private Long timestamp;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime timestamp;
+
   private final String message;
   private final T data;
 
-  public APIResponseDTO(Long timestamp, String message) {
+  public APIResponseDTO(LocalDateTime timestamp, String message) {
     this.timestamp = timestamp;
     this.message = message;
     this.data = null;

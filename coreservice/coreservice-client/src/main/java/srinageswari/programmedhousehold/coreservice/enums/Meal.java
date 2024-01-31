@@ -13,5 +13,5 @@ public enum Meal {
   LUNCH("Lunch"),
   DINNER("Dinner"),
   MISC("Misc");
-  private String label;
+  private final String label;
 }

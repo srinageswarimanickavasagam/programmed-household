@@ -1,0 +1,96 @@
+{
+  "mappings": {
+    "properties": {
+      "recipe_id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text"
+      },
+      "reference": {
+        "type": "keyword"
+      },
+      "prep_time": {
+        "type": "keyword"
+      },
+      "cook_time": {
+        "type": "keyword"
+      },
+      "instructions": {
+        "type": "text"
+      },
+      "health_label": {
+        "type": "text"
+      },
+      "cuisine": {
+        "type": "keyword"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "meal": {
+        "type": "keyword"
+      },
+      "schedule_day": {
+        "type": "keyword"
+      },
+      "difficulty": {
+        "type": "keyword"
+      },
+      "side_dish": {
+        "type": "boolean"
+      },
+      "scheduled_on": {
+        "type": "date"
+      },
+      "notes": {
+        "type": "text"
+      },
+      "ingredients": {
+        "type": "nested",
+        "properties": {
+          "soak": {
+            "type": "object",
+            "dynamic": true
+          },
+          "temper": {
+            "type": "object",
+            "dynamic": true
+          },
+          "fry": {
+            "type": "object",
+            "dynamic": true
+          },
+          "fry_grind": {
+            "type": "object",
+            "dynamic": true
+          },
+          "grind": {
+            "type": "object",
+            "dynamic": true
+          },
+          "marinate": {
+            "type": "object",
+            "dynamic": true
+          },
+          "pressure_cook": {
+            "type": "object",
+            "dynamic": true
+          },
+          "chop": {
+            "type": "object",
+            "dynamic": true
+          },
+          "garnish": {
+            "type": "object",
+            "dynamic": true
+          },
+          "others": {
+            "type": "object",
+            "dynamic": true
+          }
+        }
+      }
+    }
+  }
+}

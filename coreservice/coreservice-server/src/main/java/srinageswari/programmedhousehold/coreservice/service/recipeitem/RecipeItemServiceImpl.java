@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
-import srinageswari.programmedhousehold.coreservice.common.exception.helper.ElementAlreadyExistsException;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeItemDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
@@ -33,48 +32,20 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
   /**
    * Adds item to the given recipe
    *
-   * @param request
+   * @param recipeItemDTO
    * @return
    */
   @Transactional
-  public CommandResponseDTO addItemToRecipe(RecipeItemDTO request) {
-    final ItemEntity itemEntity;
-    if (request.getItem().getId() != 0) {
-      // check if the item is already defined for the recipe
-      if (recipeItemRepository.existsByRecipeIdAndItemId(
-          request.getRecipe().getId(), request.getItem().getId())) {
-        log.error(Constants.ALREADY_EXISTS_ITEM);
-        throw new ElementAlreadyExistsException(
-            String.format(Constants.ALREADY_EXISTS_ITEM, request.getItem().getId()));
-      }
-      itemEntity = new ItemEntity(request.getItem().getId());
-    } else {
-      // check if the new item is already defined before
-      if (itemRepository.existsByNameIgnoreCase(request.getItem().getName())) {
-        log.error(Constants.ALREADY_EXISTS_ITEM);
-        throw new ElementAlreadyExistsException(
-            String.format(Constants.ALREADY_EXISTS_ITEM, request.getItem()));
-      }
-      ItemtypeEntity itemtype =
-          itemtypeRepository.findByType(request.getItem().getItemtype().getType());
-      if (null == itemtype) {
-        itemtype =
-            itemtypeRepository.save(
-                new ItemtypeEntity(0L, request.getItem().getItemtype().getType()));
-      }
-      itemEntity = itemRepository.save(new ItemEntity(0L, request.getItem().getName(), itemtype));
-    }
-    // if needed, we can also check if recipe and unit values exists in db (we assumed recipe is
-    // already defined and unit is selected from the list)
-    final RecipeEntity recipeEntity = new RecipeEntity(request.getRecipe().getId());
+  public CommandResponseDTO addItemToRecipe(RecipeItemDTO recipeItemDTO) {
+    final ItemEntity itemEntity = processRecipeItem(recipeItemDTO);
+    final RecipeEntity recipeEntity = new RecipeEntity(recipeItemDTO.getRecipe().getId());
     final RecipeItemEntity recipeItemEntity =
         new RecipeItemEntity(
             recipeEntity,
             itemEntity,
-            request.getUnit(),
-            request.getRequiredQty(),
-            request.getCulinaryStep());
-
+            recipeItemDTO.getUnit(),
+            recipeItemDTO.getRequiredQty(),
+            recipeItemDTO.getCulinaryStep());
     recipeItemRepository.save(recipeItemEntity);
     return CommandResponseDTO.builder().id(recipeItemEntity.getRecipe().getId()).build();
   }
@@ -96,5 +67,27 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
                 });
     recipeItemRepository.delete(recipeItemEntity);
+  }
+
+  public ItemEntity processRecipeItem(RecipeItemDTO recipeItemDTO) {
+    final ItemEntity itemEntity;
+    itemEntity =
+        itemRepository
+            .findById(recipeItemDTO.getItem().getId())
+            .orElseGet(
+                () -> {
+                  ItemtypeEntity itemtype =
+                      itemtypeRepository.findByType(
+                          recipeItemDTO.getItem().getItemtype().getType());
+                  if (itemtype == null) {
+                    itemtype =
+                        itemtypeRepository.save(
+                            new ItemtypeEntity(
+                                0L, recipeItemDTO.getItem().getItemtype().getType()));
+                  }
+                  return itemRepository.save(
+                      new ItemEntity(0L, recipeItemDTO.getItem().getName(), itemtype));
+                });
+    return itemEntity;
   }
 }
