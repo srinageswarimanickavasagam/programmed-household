@@ -18,5 +18,5 @@ public enum HealthLabel {
   VEGETARIAN("Vegetarian"),
   WHEAT_FREE("Wheat-free");
 
-  private String label;
+  private final String label;
 }

@@ -22,6 +22,11 @@ services:
       - 9200:9200
     networks:
       - ph-net
+    healthcheck:
+      test: curl -s http://es01:9200 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 50
   es02:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
     container_name: es02
@@ -42,6 +47,12 @@ services:
       - data02:/usr/share/elasticsearch/data
     networks:
       - ph-net
+    healthcheck:
+      test: curl -s http://es02:9200 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 50
+
   kib01:
     image: docker.elastic.co/kibana/kibana:8.11.4
     container_name: kib01
@@ -88,6 +99,28 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
+    networks:
+      - ph-net
+
+  elasticsearch:
+    build:
+      context: ./elasticsearch/elasticsearch-server
+      dockerfile: Dockerfile
+    container_name: elasticsearch
+    ports:
+      - "9000:9000"
+    environment:
+      ELASTIC_HOST: es01
+      ELASTIC_PORT: 9200
+      ELASTIC_USERNAME: elastic
+      ELASTIC_PASSWORD: password
+      MAX_CONN_TOTAL: 500
+      MAX_CONN_PER_ROUTE: 500
+    depends_on:
+      es01:
+       condition: service_healthy
+      es02:
+       condition: service_healthy
     networks:
       - ph-net
 

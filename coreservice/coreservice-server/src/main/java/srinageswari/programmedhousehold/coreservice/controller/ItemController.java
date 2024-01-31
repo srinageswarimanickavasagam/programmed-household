@@ -1,7 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.controller;
 
 import jakarta.validation.Valid;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class ItemController {
   public ResponseEntity<APIResponseDTO<ItemDTO>> findById(@PathVariable long id) {
     final ItemDTO response = itemService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -48,7 +48,7 @@ public class ItemController {
       @RequestBody SearchRequestDTO request) {
     final Page<ItemDTO> response = itemService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -61,7 +61,7 @@ public class ItemController {
       @Valid @RequestBody ItemDTO request) {
     final CommandResponseDTO response = itemService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**
@@ -74,7 +74,7 @@ public class ItemController {
       @Valid @RequestBody ItemDTO request) {
     final CommandResponseDTO response = itemService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(Instant.now().toEpochMilli(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
   }
 
   /**

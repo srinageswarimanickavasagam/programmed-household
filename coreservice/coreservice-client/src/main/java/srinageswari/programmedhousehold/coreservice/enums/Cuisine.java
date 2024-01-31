@@ -11,5 +11,5 @@ import lombok.Getter;
 public enum Cuisine {
   EUROPEAN("European"),
   INDIAN("Indian");
-  private String label;
+  private final String label;
 }

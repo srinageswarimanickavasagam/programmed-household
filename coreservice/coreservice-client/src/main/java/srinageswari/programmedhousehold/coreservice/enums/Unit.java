@@ -19,5 +19,5 @@ public enum Unit {
   COUNT("count"),
   PACK("pack");
 
-  private String label;
+  private final String label;
 }
