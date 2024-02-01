@@ -2,7 +2,6 @@ package srinageswari.programmedhousehold.coreservice.service.itemtype;
 
 import org.springframework.data.domain.Page;
 import srinageswari.programmedhousehold.coreservice.dto.ItemtypeDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 
 /**
@@ -14,9 +13,9 @@ public interface IItemtypeService {
 
   public Page<ItemtypeDTO> findAll(SearchRequestDTO request);
 
-  public CommandResponseDTO create(ItemtypeDTO request);
+  public ItemtypeDTO create(ItemtypeDTO request);
 
-  public CommandResponseDTO update(ItemtypeDTO request);
+  public ItemtypeDTO update(ItemtypeDTO request);
 
   public void deleteById(Long id);
 }

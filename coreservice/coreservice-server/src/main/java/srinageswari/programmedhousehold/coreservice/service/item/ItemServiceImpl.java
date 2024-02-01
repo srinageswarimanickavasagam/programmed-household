@@ -13,7 +13,6 @@ import srinageswari.programmedhousehold.coreservice.common.exception.helper.Elem
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.ItemMapper;
 import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
@@ -73,14 +72,13 @@ public class ItemServiceImpl implements IItemService {
    * @param request
    * @return
    */
-  public CommandResponseDTO create(ItemDTO request) {
+  public ItemDTO create(ItemDTO request) {
     if (itemRepository.existsByNameIgnoreCase(request.getName())) {
       log.error(Constants.ALREADY_EXISTS_ITEM);
       throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_ITEM);
     }
     final ItemEntity itemEntity = itemMapper.toEntity(request);
-    itemRepository.save(itemEntity);
-    return CommandResponseDTO.builder().id(itemEntity.getId()).build();
+    return itemMapper.toDto(itemRepository.save(itemEntity));
   }
 
   /**
@@ -89,7 +87,7 @@ public class ItemServiceImpl implements IItemService {
    * @param request
    * @return
    */
-  public CommandResponseDTO update(ItemDTO request) {
+  public ItemDTO update(ItemDTO request) {
     final ItemEntity itemEntity =
         itemRepository
             .findById(request.getId())
@@ -104,8 +102,7 @@ public class ItemServiceImpl implements IItemService {
       throw new ElementAlreadyExistsException(Constants.ALREADY_EXISTS_ITEM);
     }
     itemEntity.setName(capitalizeFully(request.getName()));
-    itemRepository.save(itemEntity);
-    return CommandResponseDTO.builder().id(itemEntity.getId()).build();
+    return itemMapper.toDto(itemRepository.save(itemEntity));
   }
 
   /**

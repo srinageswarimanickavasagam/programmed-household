@@ -58,8 +58,8 @@ public class RecipeDTO {
   @JsonProperty("recipeItems")
   private List<RecipeItemDTO> recipeItems;
 
-  @JsonProperty("scheduledAt")
-  private Date scheduledAt;
+  @JsonProperty("scheduledDt")
+  private Date scheduledDt;
 
   @JsonProperty("notes")
   private String notes;

@@ -10,7 +10,6 @@ import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.CategoryDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.CategoryMapper;
 import srinageswari.programmedhousehold.coreservice.model.CategoryEntity;
@@ -72,10 +71,9 @@ public class CategoryServiceImpl implements ICategoryService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO create(CategoryDTO request) {
+  public CategoryDTO create(CategoryDTO request) {
     final CategoryEntity categoryEntity = categoryMapper.toEntity(request);
-    categoryRepository.save(categoryEntity);
-    return CommandResponseDTO.builder().id(categoryEntity.getCategoryId()).build();
+    return categoryMapper.toDto(categoryRepository.save(categoryEntity));
   }
 
   /**
@@ -85,7 +83,7 @@ public class CategoryServiceImpl implements ICategoryService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO update(CategoryDTO request) {
+  public CategoryDTO update(CategoryDTO request) {
     final CategoryEntity categoryEntity =
         categoryRepository
             .findById(request.getCategoryId())
@@ -99,8 +97,7 @@ public class CategoryServiceImpl implements ICategoryService {
     categoryEntity.setDay(request.getDay());
     categoryEntity.setDifficulty(request.getDifficulty());
     categoryEntity.setSidedish(request.isSidedish());
-    categoryRepository.save(categoryEntity);
-    return CommandResponseDTO.builder().id(categoryEntity.getCategoryId()).build();
+    return categoryMapper.toDto(categoryRepository.save(categoryEntity));
   }
 
   /**
