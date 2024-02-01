@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeItemDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.service.recipeitem.IRecipeItemService;
 
 /**
@@ -29,11 +28,11 @@ public class RecipeItemController {
    * @return id of the recipe to which item is added
    */
   @PostMapping("/recipeItems")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> addItemToRecipe(
+  public ResponseEntity<APIResponseDTO<RecipeItemDTO>> addItemToRecipe(
       @Valid @RequestBody RecipeItemDTO request) {
-    final CommandResponseDTO response = recipeItemService.addItemToRecipe(request);
+    final RecipeItemDTO response = recipeItemService.addItemToRecipe(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response, 1));
   }
 
   /**

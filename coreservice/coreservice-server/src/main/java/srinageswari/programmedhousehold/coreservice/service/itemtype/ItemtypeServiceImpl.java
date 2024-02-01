@@ -10,7 +10,6 @@ import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.ItemtypeDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.ItemtypeMapper;
 import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
@@ -72,10 +71,9 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO create(ItemtypeDTO request) {
+  public ItemtypeDTO create(ItemtypeDTO request) {
     final ItemtypeEntity itemtypeEntity = itemtypeMapper.toEntity(request);
-    itemtypeRepository.save(itemtypeEntity);
-    return CommandResponseDTO.builder().id(itemtypeEntity.getTypeId()).build();
+    return itemtypeMapper.toDto(itemtypeRepository.save(itemtypeEntity));
   }
 
   /**
@@ -85,7 +83,7 @@ public class ItemtypeServiceImpl implements IItemtypeService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO update(ItemtypeDTO request) {
+  public ItemtypeDTO update(ItemtypeDTO request) {
     final ItemtypeEntity itemtypeEntity =
         itemtypeRepository
             .findById(request.getTypeId())
@@ -95,8 +93,7 @@ public class ItemtypeServiceImpl implements IItemtypeService {
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_RECIPE);
                 });
     itemtypeEntity.setType(request.getType());
-    itemtypeRepository.save(itemtypeEntity);
-    return CommandResponseDTO.builder().id(itemtypeEntity.getTypeId()).build();
+    return itemtypeMapper.toDto(itemtypeRepository.save(itemtypeEntity));
   }
 
   /**

@@ -1,4 +1,4 @@
-package srinageswari.programmedhousehold.elasticsearch;
+package srinageswari.programmedhousehold.elasticsearch.common;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -13,11 +13,13 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class ElasticsearchConfiguration {
 
   @Bean
+  @Scope("singleton")
   public ElasticsearchClient elasticsearchClient(
       @Value("${app.elasticsearch.host}") String elasticsearchHost,
       @Value("${app.elasticsearch.port}") int port,

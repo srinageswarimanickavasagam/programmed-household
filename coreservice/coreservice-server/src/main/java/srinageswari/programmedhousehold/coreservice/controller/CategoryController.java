@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.dto.CategoryDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.category.ICategoryService;
 
@@ -35,7 +34,7 @@ public class CategoryController {
   public ResponseEntity<APIResponseDTO<CategoryDTO>> findById(@PathVariable long id) {
     final CategoryDTO response = categoryService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -49,7 +48,8 @@ public class CategoryController {
       @RequestBody SearchRequestDTO request) {
     final Page<CategoryDTO> response = categoryService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(
+            LocalDateTime.now(), Constants.SUCCESS, response, response.getTotalElements()));
   }
 
   /**
@@ -58,11 +58,10 @@ public class CategoryController {
    * @return id of the created category
    */
   @PostMapping("/category")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> create(
-      @RequestBody CategoryDTO request) {
-    final CommandResponseDTO response = categoryService.create(request);
+  public ResponseEntity<APIResponseDTO<CategoryDTO>> create(@RequestBody CategoryDTO request) {
+    final CategoryDTO response = categoryService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -71,11 +70,10 @@ public class CategoryController {
    * @return id of the updated category
    */
   @PutMapping("/category")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
-      @RequestBody CategoryDTO request) {
-    final CommandResponseDTO response = categoryService.update(request);
+  public ResponseEntity<APIResponseDTO<CategoryDTO>> update(@RequestBody CategoryDTO request) {
+    final CategoryDTO response = categoryService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**

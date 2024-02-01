@@ -15,7 +15,6 @@ import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
 import srinageswari.programmedhousehold.coreservice.model.*;
@@ -88,17 +87,16 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO create(RecipeDTO request) {
+  public RecipeDTO create(RecipeDTO request) {
     RecipeEntity recipe = recipeRepository.save(constructRecipeEntity(request));
-    String json = elasticsearchService.saveToElasticsearch(recipe);
-    return CommandResponseDTO.builder().id(recipe.getId()).response(json).build();
+    return recipeMapper.toDto(recipe);
   }
 
   @Transactional
-  public CommandResponseDTO bulkInsert(List<RecipeDTO> recipeDTOList) {
+  public List<RecipeDTO> bulkInsert(List<RecipeDTO> recipeDTOList) {
     List<RecipeEntity> entities = recipeDTOList.stream().map(this::constructRecipeEntity).toList();
     List<RecipeEntity> response = recipeRepository.saveAll(entities);
-    return CommandResponseDTO.builder().size(response.size()).build();
+    return response.stream().map(recipeMapper::toDto).toList();
   }
 
   /**
@@ -109,7 +107,7 @@ public class RecipeServiceImpl implements IRecipeService {
    */
   @Transactional
   // for adding/removing items for a current recipe, use RecipeItemService methods
-  public CommandResponseDTO update(RecipeDTO request) {
+  public RecipeDTO update(RecipeDTO request) {
     final RecipeEntity recipeEntity =
         recipeRepository
             .findById(request.getId())
@@ -125,8 +123,7 @@ public class RecipeServiceImpl implements IRecipeService {
     recipeEntity.setServings(request.getServings());
     recipeEntity.setInstructions(request.getInstructions());
     recipeEntity.setHealthLabel(request.getHealthLabel());
-    recipeRepository.save(recipeEntity);
-    return CommandResponseDTO.builder().id(recipeEntity.getId()).build();
+    return recipeMapper.toDto(recipeRepository.save(recipeEntity));
   }
 
   /**
