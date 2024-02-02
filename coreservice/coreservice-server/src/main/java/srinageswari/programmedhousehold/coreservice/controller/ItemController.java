@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.item.IItemService;
 
@@ -34,7 +33,7 @@ public class ItemController {
   public ResponseEntity<APIResponseDTO<ItemDTO>> findById(@PathVariable long id) {
     final ItemDTO response = itemService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -48,7 +47,8 @@ public class ItemController {
       @RequestBody SearchRequestDTO request) {
     final Page<ItemDTO> response = itemService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(
+            LocalDateTime.now(), Constants.SUCCESS, response, response.getTotalElements()));
   }
 
   /**
@@ -57,11 +57,10 @@ public class ItemController {
    * @return id of the created item
    */
   @PostMapping("/item")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> create(
-      @Valid @RequestBody ItemDTO request) {
-    final CommandResponseDTO response = itemService.create(request);
+  public ResponseEntity<APIResponseDTO<ItemDTO>> create(@Valid @RequestBody ItemDTO request) {
+    final ItemDTO response = itemService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -70,11 +69,10 @@ public class ItemController {
    * @return id of the updated item
    */
   @PutMapping("/item")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
-      @Valid @RequestBody ItemDTO request) {
-    final CommandResponseDTO response = itemService.update(request);
+  public ResponseEntity<APIResponseDTO<ItemDTO>> update(@Valid @RequestBody ItemDTO request) {
+    final ItemDTO response = itemService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**

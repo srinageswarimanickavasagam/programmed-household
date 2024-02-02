@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeItemDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
+import srinageswari.programmedhousehold.coreservice.mapper.RecipeItemMapper;
 import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
 import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
 import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
@@ -28,6 +28,7 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
   private final RecipeItemRepository recipeItemRepository;
   private final ItemRepository itemRepository;
   private final ItemtypeRepository itemtypeRepository;
+  private final RecipeItemMapper recipeItemMapper;
 
   /**
    * Adds item to the given recipe
@@ -36,7 +37,7 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
    * @return
    */
   @Transactional
-  public CommandResponseDTO addItemToRecipe(RecipeItemDTO recipeItemDTO) {
+  public RecipeItemDTO addItemToRecipe(RecipeItemDTO recipeItemDTO) {
     final ItemEntity itemEntity = processRecipeItem(recipeItemDTO);
     final RecipeEntity recipeEntity = new RecipeEntity(recipeItemDTO.getRecipe().getId());
     final RecipeItemEntity recipeItemEntity =
@@ -46,8 +47,7 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
             recipeItemDTO.getUnit(),
             recipeItemDTO.getRequiredQty(),
             recipeItemDTO.getCulinaryStep());
-    recipeItemRepository.save(recipeItemEntity);
-    return CommandResponseDTO.builder().id(recipeItemEntity.getRecipe().getId()).build();
+    return recipeItemMapper.toDto(recipeItemRepository.save(recipeItemEntity));
   }
 
   /**

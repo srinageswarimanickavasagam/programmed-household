@@ -5,7 +5,7 @@
         "type": "long"
       },
       "title": {
-        "type": "text"
+        "type": "keyword"
       },
       "reference": {
         "type": "keyword"

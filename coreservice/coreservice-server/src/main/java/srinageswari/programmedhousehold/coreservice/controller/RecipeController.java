@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.recipe.IRecipeService;
 import srinageswari.programmedhousehold.coreservice.validator.ValidItem;
@@ -38,7 +37,7 @@ public class RecipeController {
   public ResponseEntity<APIResponseDTO<RecipeDTO>> findById(@PathVariable long id) {
     final RecipeDTO response = recipeService.findById(id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -52,7 +51,8 @@ public class RecipeController {
       @RequestBody SearchRequestDTO request) {
     final Page<RecipeDTO> response = recipeService.findAll(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(
+            LocalDateTime.now(), Constants.SUCCESS, response, response.getTotalElements()));
   }
 
   /**
@@ -61,11 +61,11 @@ public class RecipeController {
    * @return id of the created recipe
    */
   @PostMapping("/recipe")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> create(
+  public ResponseEntity<APIResponseDTO<RecipeDTO>> create(
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
-    final CommandResponseDTO response = recipeService.create(request);
+    final RecipeDTO response = recipeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -74,11 +74,13 @@ public class RecipeController {
    * @return size of the created recipe
    */
   @PostMapping("/bulkinsert/recipes")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> bulkInsert(
+  public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> bulkInsert(
       @RequestBody List<RecipeDTO> recipeDTOS) {
-    final CommandResponseDTO response = recipeService.bulkInsert(recipeDTOS);
+    final List<RecipeDTO> response = recipeService.bulkInsert(recipeDTOS);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        .body(
+            new APIResponseDTO<>(
+                LocalDateTime.now(), Constants.SUCCESS, response, response.size()));
   }
 
   /**
@@ -87,11 +89,11 @@ public class RecipeController {
    * @return id of the updated recipe
    */
   @PutMapping("/recipe")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
+  public ResponseEntity<APIResponseDTO<RecipeDTO>> update(
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
-    final CommandResponseDTO response = recipeService.update(request);
+    final RecipeDTO response = recipeService.update(request);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
 
   /**
@@ -109,6 +111,6 @@ public class RecipeController {
   public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> search(@PathVariable long category_id) {
     final List<RecipeDTO> response = recipeService.getRecipeByCategoryId(category_id);
     return ResponseEntity.ok(
-        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response));
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, response.size()));
   }
 }

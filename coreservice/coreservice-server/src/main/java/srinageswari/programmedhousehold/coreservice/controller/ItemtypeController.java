@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.dto.ItemtypeDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
-import srinageswari.programmedhousehold.coreservice.dto.common.CommandResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.itemtype.IItemtypeService;
 
@@ -34,7 +33,7 @@ public class ItemtypeController {
   @GetMapping("/itemtype/{id}")
   public ResponseEntity<APIResponseDTO<ItemtypeDTO>> findById(@PathVariable long id) {
     final ItemtypeDTO response = itemtypeService.findById(id);
-    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response, 1));
   }
 
   /**
@@ -47,7 +46,8 @@ public class ItemtypeController {
   public ResponseEntity<APIResponseDTO<Page<ItemtypeDTO>>> findAll(
       @RequestBody SearchRequestDTO request) {
     final Page<ItemtypeDTO> response = itemtypeService.findAll(request);
-    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
+    return ResponseEntity.ok(
+        new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response, response.getTotalElements()));
   }
 
   /**
@@ -56,11 +56,11 @@ public class ItemtypeController {
    * @return id of the created itemtype
    */
   @PostMapping("/itemtype")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> create(
+  public ResponseEntity<APIResponseDTO<ItemtypeDTO>> create(
       @Valid @RequestBody ItemtypeDTO request) {
-    final CommandResponseDTO response = itemtypeService.create(request);
+    final ItemtypeDTO response = itemtypeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
+        .body(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response, 1));
   }
 
   /**
@@ -69,10 +69,10 @@ public class ItemtypeController {
    * @return id of the updated itemtype
    */
   @PutMapping("/itemtype")
-  public ResponseEntity<APIResponseDTO<CommandResponseDTO>> update(
+  public ResponseEntity<APIResponseDTO<ItemtypeDTO>> update(
       @Valid @RequestBody ItemtypeDTO request) {
-    final CommandResponseDTO response = itemtypeService.update(request);
-    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response));
+    final ItemtypeDTO response = itemtypeService.update(request);
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), SUCCESS, response, 1));
   }
 
   /**

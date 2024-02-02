@@ -13,6 +13,8 @@ public final class Constants {
   @Value("${spring.jackson.date-format}")
   private static String dateFormat;
 
+  public static final String SUCCESS = "Success";
+
   public static final String FIELD_PARSE_ERROR = "Failed parse field type DATE {}";
   public static final String FIELD_TYPE_ERROR = "Can not use between for {} field type";
 
