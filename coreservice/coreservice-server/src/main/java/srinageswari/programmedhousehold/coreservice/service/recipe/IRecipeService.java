@@ -9,17 +9,19 @@ import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
  * @author smanickavasagam
  */
 public interface IRecipeService {
-  public RecipeDTO findById(Long id);
+  RecipeDTO findById(Long id);
 
-  public Page<RecipeDTO> findAll(SearchRequestDTO request);
+  Page<RecipeDTO> findAll(SearchRequestDTO request);
 
-  public RecipeDTO create(RecipeDTO request);
+  RecipeDTO create(RecipeDTO request);
 
-  public List<RecipeDTO> bulkInsert(List<RecipeDTO> recipeDTOList);
+  List<RecipeDTO> bulkInsert(List<RecipeDTO> recipeDTOList);
 
-  public RecipeDTO update(RecipeDTO request);
+  RecipeDTO update(RecipeDTO request);
 
   List<RecipeDTO> getRecipeByCategoryId(Long id);
 
-  public void deleteById(Long id);
+  List<RecipeDTO> getTodaysRecipes();
+
+  void deleteById(Long id);
 }

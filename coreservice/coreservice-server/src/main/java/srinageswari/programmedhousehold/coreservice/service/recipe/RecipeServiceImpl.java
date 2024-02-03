@@ -18,8 +18,6 @@ import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
 import srinageswari.programmedhousehold.coreservice.model.*;
-import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
-import srinageswari.programmedhousehold.coreservice.repository.ItemtypeRepository;
 import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
 import srinageswari.programmedhousehold.coreservice.service.recipeitem.RecipeItemServiceImpl;
@@ -33,10 +31,8 @@ import srinageswari.programmedhousehold.coreservice.service.recipeitem.RecipeIte
 @RequiredArgsConstructor
 public class RecipeServiceImpl implements IRecipeService {
   private final RecipeRepository recipeRepository;
-  private final ItemRepository itemRepository;
   private final RecipeMapper recipeMapper;
   private final AppUserServiceImpl appUserServiceImpl;
-  private final ItemtypeRepository itemtypeRepository;
   private final ElasticsearchService elasticsearchService;
   private final RecipeItemServiceImpl recipeItemServiceImpl;
 
@@ -146,6 +142,10 @@ public class RecipeServiceImpl implements IRecipeService {
 
   public List<RecipeDTO> getRecipeByCategoryId(Long id) {
     return recipeRepository.findrecipesByCategoryId(id).stream().map(recipeMapper::toDto).toList();
+  }
+
+  public List<RecipeDTO> getTodaysRecipes() {
+    return recipeRepository.queryTodaysRecipes().stream().map(recipeMapper::toDto).toList();
   }
 
   public RecipeEntity constructRecipeEntity(RecipeDTO request) {
