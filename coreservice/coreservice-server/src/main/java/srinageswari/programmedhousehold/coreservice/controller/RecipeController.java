@@ -2,6 +2,7 @@ package srinageswari.programmedhousehold.coreservice.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.recipe.IRecipeService;
+import srinageswari.programmedhousehold.coreservice.service.recipe.SchedulingService;
 import srinageswari.programmedhousehold.coreservice.validator.ValidItem;
 
 /**
@@ -26,6 +28,7 @@ import srinageswari.programmedhousehold.coreservice.validator.ValidItem;
 public class RecipeController {
 
   private final IRecipeService recipeService;
+  private final SchedulingService schedulingService;
 
   /**
    * Fetches recipe by id
@@ -113,4 +116,22 @@ public class RecipeController {
     return ResponseEntity.ok(
         new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, response.size()));
   }
-}
+
+  @GetMapping("/recipes/today")
+  public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> getTodaysRecipes() {
+    final List<RecipeDTO> response = recipeService.getTodaysRecipes();
+    return ResponseEntity.ok(
+        new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, response.size()));
+  }
+
+  @PostMapping("/recipe/scheduleAll/{startDt}")
+  public ResponseEntity<APIResponseDTO<Void>> scheduleAll(@PathVariable Date startDt) {
+    schedulingService.scheduleAllRecipes(startDt);
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, null, 0));
+  }
+
+  @PostMapping("/recipe/updateSubsequentSchedules")
+  public ResponseEntity<APIResponseDTO<Void>> updateSubsequentSchedules() {
+    schedulingService.updateSubsequentSchedules();
+    return ResponseEntity.ok(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, null, 0));
+  }}

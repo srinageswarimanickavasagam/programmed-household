@@ -1,5 +1,6 @@
 package srinageswari.programmedhousehold.coreservice.repository;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,4 +16,13 @@ public interface RecipeRepository
     extends JpaRepository<RecipeEntity, Long>, JpaSpecificationExecutor<RecipeEntity> {
   @Query(value = "SELECT * FROM recipe r where r.category_id = ?1", nativeQuery = true)
   List<RecipeEntity> findrecipesByCategoryId(Long categoryId);
+
+  @Query(value = "SELECT * FROM recipe r", nativeQuery = true)
+  void scheduleAllRecipes(Date startDt);
+
+  @Query(value = "SELECT * FROM recipe", nativeQuery = true)
+  void updateSubsequentSchedules(List<Long> recipeIds);
+
+  @Query(value = "SELECT * FROM recipe", nativeQuery = true)
+  List<RecipeEntity> queryTodaysRecipes();
 }
