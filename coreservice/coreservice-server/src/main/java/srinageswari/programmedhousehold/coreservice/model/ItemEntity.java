@@ -9,7 +9,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -28,9 +27,6 @@ public class ItemEntity {
   @Column(unique = true, nullable = false, length = 50)
   private String name;
 
-  @Enumerated(value = EnumType.STRING)
-  private Unit unit;
-
   @ManyToOne
   @JoinColumn(name = "type_id")
   ItemtypeEntity itemtype;
@@ -40,10 +36,6 @@ public class ItemEntity {
   private BigDecimal amount;
 
   private Date stockedDt;
-
-  private boolean isEssential;
-
-  private int refill;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
   private Set<RecipeItemEntity> recipeItems = new HashSet<>();
