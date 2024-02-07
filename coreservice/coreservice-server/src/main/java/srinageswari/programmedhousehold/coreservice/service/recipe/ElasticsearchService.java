@@ -54,8 +54,7 @@ public class ElasticsearchService {
           recipeItems.forEach(
               recipeItem -> {
                 recipeItemJsonObject.put(
-                    recipeItem.getItem().getName(),
-                    recipeItem.getRequiredQty().toString() + recipeItem.getUnit().getLabel());
+                    recipeItem.getItem().getName(), recipeItem.getRequiredQty().toString());
               });
           allIngredients.set(culinaryStep.getLabel(), recipeItemJsonObject);
         });

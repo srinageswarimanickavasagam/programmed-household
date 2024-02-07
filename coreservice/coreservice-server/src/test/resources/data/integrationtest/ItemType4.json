@@ -1,4 +1,5 @@
 {
   "id" : 4,
-  "type" : "Dal"
+  "type" : "Dal",
+  "stockUnit" : "GRAM"
 }

@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -15,7 +14,6 @@ import srinageswari.programmedhousehold.coreservice.enums.Unit;
 @Data
 @NoArgsConstructor
 public class ItemDTO {
-
   @JsonProperty("itemId")
   private Long id;
 
@@ -29,19 +27,10 @@ public class ItemDTO {
   @JsonProperty("amount")
   private BigDecimal amount;
 
-  @JsonProperty("unit")
-  private Unit unit;
-
   @JsonProperty("stockedDt")
   private Date stockedDt;
 
   @JsonProperty("itemtype")
   @NotNull
   private ItemtypeDTO itemtype;
-
-  @JsonProperty("essential")
-  private boolean essential;
-
-  @JsonProperty("refill")
-  private int refill;
 }

@@ -44,7 +44,6 @@ public class RecipeItemServiceImpl implements IRecipeItemService {
         new RecipeItemEntity(
             recipeEntity,
             itemEntity,
-            recipeItemDTO.getUnit(),
             recipeItemDTO.getRequiredQty(),
             recipeItemDTO.getCulinaryStep());
     return recipeItemMapper.toDto(recipeItemRepository.save(recipeItemEntity));

@@ -22,8 +22,7 @@
           "type": "Rice"
         }
       },
-      "requiredQty": 1,
-      "unit": "KILOGRAM"
+      "requiredQty": 1
     }
   ]
 }

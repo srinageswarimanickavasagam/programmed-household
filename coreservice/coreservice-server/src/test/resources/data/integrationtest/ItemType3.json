@@ -1,4 +1,5 @@
 {
   "id" : 3,
-  "type" : "Masala Powder"
+  "type" : "Masala Powder",
+  "stockUnit" : "GRAM"
 }
