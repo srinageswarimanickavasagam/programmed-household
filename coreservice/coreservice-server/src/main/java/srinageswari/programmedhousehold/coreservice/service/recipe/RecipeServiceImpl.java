@@ -147,13 +147,9 @@ public class RecipeServiceImpl implements IRecipeService {
   }
 
   public List<RecipeResponseDTO> getRecipeByCategoryId(Long id) {
-    return recipeRepository.findrecipesByCategoryId(id).stream()
+    return recipeRepository.findRecipesByCategoryId(id).stream()
         .map(this::getRecipeResponseDTO)
         .toList();
-  }
-
-  public List<RecipeResponseDTO> getTodaysRecipes() {
-    return recipeRepository.queryTodaysRecipes().stream().map(this::getRecipeResponseDTO).toList();
   }
 
   public RecipeEntity constructRecipeEntity(RecipeDTO request) {

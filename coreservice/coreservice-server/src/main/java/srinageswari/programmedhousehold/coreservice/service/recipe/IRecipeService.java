@@ -22,7 +22,5 @@ public interface IRecipeService {
 
   List<RecipeResponseDTO> getRecipeByCategoryId(Long id);
 
-  List<RecipeResponseDTO> getTodaysRecipes();
-
   void deleteById(Long id);
 }

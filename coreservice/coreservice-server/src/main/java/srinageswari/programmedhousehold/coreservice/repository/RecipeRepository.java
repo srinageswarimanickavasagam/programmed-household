@@ -15,14 +15,14 @@ import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
 public interface RecipeRepository
     extends JpaRepository<RecipeEntity, Long>, JpaSpecificationExecutor<RecipeEntity> {
   @Query(value = "SELECT * FROM recipe r where r.category_id = ?1", nativeQuery = true)
-  List<RecipeEntity> findrecipesByCategoryId(Long categoryId);
+  List<RecipeEntity> findRecipesByCategoryId(Long categoryId);
 
-  @Query(value = "SELECT * FROM recipe r", nativeQuery = true)
-  void scheduleAllRecipes(Date startDt);
+  @Query(value = "CALL RESET_ALL_RECIPE_SCHEDULES(:startDt)", nativeQuery = true)
+  void resetAllRecipeSchedules(Date startDt);
 
-  @Query(value = "SELECT * FROM recipe", nativeQuery = true)
-  void updateSubsequentSchedules(List<Long> recipeIds);
-
-  @Query(value = "SELECT * FROM recipe", nativeQuery = true)
+  @Query(value = "SELECT * FROM recipe WHERE DATE(scheduled_dt) = CURDATE()", nativeQuery = true)
   List<RecipeEntity> queryTodaysRecipes();
+
+  @Query(value = "CALL UPDATE_SUBSEQUENT_SCHEDULES()", nativeQuery = true)
+  void updateSubsequentSchedules();
 }
