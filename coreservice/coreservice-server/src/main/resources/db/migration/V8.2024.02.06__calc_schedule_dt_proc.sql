@@ -1,8 +1,14 @@
 DELIMITER //
 
-CREATE PROCEDURE CalculateFutureDate(IN desired_day VARCHAR(20), OUT future_date_out DATE)
+CREATE PROCEDURE CALC_SCHEDULE_DT(IN desired_day VARCHAR(20), IN start_date DATE, OUT future_date_out DATE)
 BEGIN
     DECLARE desired_day_value INT;
+    DECLARE startDt DATE DEFAULT CURRENT_DATE(); -- Default value as current date
+
+    -- If start_date is provided, replace the default start date with it
+    IF start_date IS NOT NULL THEN
+        SET startDt = start_date;
+    END IF;
 
     -- Map the string representation of the desired day to its corresponding integer value
     CASE desired_day
@@ -16,12 +22,11 @@ BEGIN
         ELSE SET desired_day_value = NULL; -- Handle invalid input
         END CASE;
 
-    -- Calculate future date based on the integer value of the desired day
+    -- Calculate future date based on the integer value of the desired day and the start date
     SET future_date_out = (
-        CASE
-            WHEN DAYOFWEEK(CURRENT_DATE()) < desired_day_value THEN DATE_ADD(CURRENT_DATE(), INTERVAL (desired_day_value - DAYOFWEEK(CURRENT_DATE())) DAY)
-            ELSE DATE_ADD(CURRENT_DATE(), INTERVAL (7 - DAYOFWEEK(CURRENT_DATE()) + desired_day_value) DAY)
-            END
+        IF(DAYOFWEEK(startDt) < desired_day_value,
+           DATE_ADD(startDt, INTERVAL (desired_day_value - DAYOFWEEK(startDt)) DAY),
+           DATE_ADD(startDt, INTERVAL (7 - DAYOFWEEK(startDt) + desired_day_value) DAY))
         );
 
 END //
