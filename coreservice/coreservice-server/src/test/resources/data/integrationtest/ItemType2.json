@@ -1,6 +1,4 @@
 {
   "id" : 2,
-  "type" : "Rice",
-  "stockUnit" : "GRAM",
-  "recipeUnit":"CUP"
+  "type" : "Rice"
 }

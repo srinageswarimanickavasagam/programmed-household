@@ -2,6 +2,9 @@ package srinageswari.programmedhousehold.coreservice.service.item;
 
 import static org.apache.commons.text.WordUtils.capitalizeFully;
 
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,10 +16,15 @@ import srinageswari.programmedhousehold.coreservice.common.exception.helper.Elem
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
+import srinageswari.programmedhousehold.coreservice.dto.PerishableItemsDTO;
+import srinageswari.programmedhousehold.coreservice.dto.PerishableItemsResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.mapper.ItemMapper;
 import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
+import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
 import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
+import srinageswari.programmedhousehold.coreservice.service.leftover.LeftoverService;
+import srinageswari.programmedhousehold.coreservice.service.recipe.RecipeServiceImpl;
 
 /**
  * @author smanickavasagam
@@ -29,6 +37,7 @@ public class ItemServiceImpl implements IItemService {
 
   private final ItemRepository itemRepository;
   private final ItemMapper itemMapper;
+  private final LeftoverService leftoverService;
 
   /**
    * Fetches an item by the given id
@@ -121,5 +130,47 @@ public class ItemServiceImpl implements IItemService {
                   return new NoSuchElementFoundException(Constants.NOT_FOUND_ITEM);
                 });
     itemRepository.delete(itemEntity);
+  }
+
+  public PerishableItemsResponseDTO getPerishableItems() {
+    List<ItemEntity> perishableItems = itemRepository.findItemsInStockAndInFridge();
+    PerishableItemsResponseDTO perishableItemsResponseDTO = new PerishableItemsResponseDTO();
+    Map<ItemtypeEntity, List<ItemEntity>> itemsByType =
+        perishableItems.stream().collect(Collectors.groupingBy(ItemEntity::getItemtype));
+    for (Map.Entry<ItemtypeEntity, List<ItemEntity>> entry : itemsByType.entrySet()) {
+      List<PerishableItemsDTO> mappedItems =
+          entry.getValue().stream()
+              .map(this::mapItemToPerishableItemDTO)
+              .collect(Collectors.toList());
+      perishableItemsResponseDTO
+          .getTypePerishableItemsMap()
+          .put(entry.getKey().getType(), mappedItems);
+    }
+    perishableItemsResponseDTO
+        .getTypePerishableItemsMap()
+        .put("LeftOvers", new ArrayList<>(leftoverService.listLeftovers()));
+    return perishableItemsResponseDTO;
+  }
+
+  public PerishableItemsDTO mapItemToPerishableItemDTO(ItemEntity itemEntity) {
+    PerishableItemsDTO perishableItemsDTO = new PerishableItemsDTO();
+    perishableItemsDTO.setId(itemEntity.getId());
+    perishableItemsDTO.setName(itemEntity.getName());
+    perishableItemsDTO.setQuantity(
+        RecipeServiceImpl.formatQty(BigDecimal.valueOf(itemEntity.getItemStockQty()))
+            + itemEntity.getStockUnit().getLabel());
+    if (itemEntity.getStockedDt() != null) {
+      perishableItemsDTO.setStorageDt(itemEntity.getStockedDt());
+      perishableItemsDTO.setUseBy(
+          calculateUseByDt(itemEntity.getStockedDt(), itemEntity.getItemtype().getStorageLife()));
+    }
+    return perishableItemsDTO;
+  }
+
+  public static Date calculateUseByDt(Date date, int days) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.DATE, days);
+    return calendar.getTime();
   }
 }

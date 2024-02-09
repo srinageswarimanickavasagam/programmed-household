@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +16,9 @@ public class ItemtypeDTO {
   @NotNull
   private String type;
 
-  @JsonProperty("stockUnit")
-  @NotNull
-  private Unit stockUnit;
+  @JsonProperty("storageLife")
+  private int storageLife;
 
-  @JsonProperty("recipeUnit")
-  @NotNull
-  private Unit recipeUnit;
-
-  @JsonProperty("refill")
-  private int refill;
+  @JsonProperty("freshFridge")
+  private boolean freshFridge;
 }

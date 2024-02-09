@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
+import srinageswari.programmedhousehold.coreservice.dto.PerishableItemsResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.item.IItemService;
@@ -84,5 +85,16 @@ public class ItemController {
   public ResponseEntity<APIResponseDTO<Void>> deleteById(@PathVariable long id) {
     itemService.deleteById(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @GetMapping("/perishableItems")
+  public ResponseEntity<APIResponseDTO<PerishableItemsResponseDTO>> getPerishableItems() {
+    final PerishableItemsResponseDTO response = itemService.getPerishableItems();
+    return ResponseEntity.ok(
+        new APIResponseDTO<>(
+            LocalDateTime.now(),
+            Constants.SUCCESS,
+            response,
+            response.getTypePerishableItemsMap().size()));
   }
 }

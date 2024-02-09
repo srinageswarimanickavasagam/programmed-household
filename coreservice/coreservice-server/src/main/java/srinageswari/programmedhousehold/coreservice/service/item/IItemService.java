@@ -2,6 +2,7 @@ package srinageswari.programmedhousehold.coreservice.service.item;
 
 import org.springframework.data.domain.Page;
 import srinageswari.programmedhousehold.coreservice.dto.ItemDTO;
+import srinageswari.programmedhousehold.coreservice.dto.PerishableItemsResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 
 /**
@@ -17,4 +18,6 @@ public interface IItemService {
   public ItemDTO update(ItemDTO request);
 
   public void deleteById(Long id);
+
+  public PerishableItemsResponseDTO getPerishableItems();
 }

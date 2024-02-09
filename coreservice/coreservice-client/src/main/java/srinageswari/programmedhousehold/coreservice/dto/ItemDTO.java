@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -33,4 +34,15 @@ public class ItemDTO {
   @JsonProperty("itemtype")
   @NotNull
   private ItemtypeDTO itemtype;
+
+  @JsonProperty("inStock")
+  private boolean inStock;
+
+  @JsonProperty("stockUnit")
+  @NotNull
+  private Unit stockUnit;
+
+  @JsonProperty("recipeUnit")
+  @NotNull
+  private Unit recipeUnit;
 }

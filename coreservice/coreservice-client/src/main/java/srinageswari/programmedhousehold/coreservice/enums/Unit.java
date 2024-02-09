@@ -11,10 +11,13 @@ import lombok.Getter;
 public enum Unit {
   GRAM("g"),
   MILLILITER("ml"),
+  LITRE("l"),
   TEASPOON("tsp"),
   TABLESPOON("tbsp"),
   CUP("cup"),
   COUNT("count"),
+  PACK("pack"),
+  FEW("few"),
   NA("not applicable");
 
   private final String label;

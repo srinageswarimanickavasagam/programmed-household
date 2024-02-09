@@ -162,9 +162,6 @@ INSERT INTO  programmedhousehold.recipe (category_id,title,reference,instruction
                                                                                                     (32,'Avira Birthday',NULL,NULL,NULL),
                                                                                                     (32,'Pappa Birthday',NULL,NULL,NULL),
                                                                                                     (32,'My Birthday',NULL,NULL,NULL),
-                                                                                                    (32,'Wedding Anniversary',NULL,NULL,NULL),
-                                                                                                    (37,'Leftover - Breakfast',NULL,NULL,NULL),
-                                                                                                    (37,'Leftover - Lunch',NULL,NULL,NULL),
-                                                                                                    (37,'Leftover - Dinner',NULL,NULL,NULL);
+                                                                                                    (32,'Wedding Anniversary',NULL,NULL,NULL);
 
 

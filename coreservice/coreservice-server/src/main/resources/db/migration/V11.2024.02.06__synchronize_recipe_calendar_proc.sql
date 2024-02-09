@@ -27,7 +27,7 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        SELECT MAX(r.scheduled_dt) INTO recent_scheduled_Dt FROM recipe r JOIN programmedhousehold.category c ON c.category_id = r.category_id WHERE c.meal = schedule_Meal AND c.day = schedule_Day AND c.name != 'Leftover' LIMIT 1;
+        SELECT MAX(r.scheduled_dt) INTO recent_scheduled_Dt FROM recipe r JOIN programmedhousehold.category c ON c.category_id = r.category_id WHERE c.meal = schedule_Meal AND c.day = schedule_Day LIMIT 1;
         SET future_schedule_Dt = DATE_ADD(recent_scheduled_Dt,INTERVAL 7 DAY); -- Example calculation
         UPDATE recipe SET scheduled_dt = future_schedule_Dt WHERE id = recipe_id;
     END LOOP;

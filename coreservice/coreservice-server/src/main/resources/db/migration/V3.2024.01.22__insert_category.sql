@@ -33,7 +33,6 @@ INSERT INTO programmedhousehold.category (category_id, name, meal, day, difficul
                                                                                                 (33,'Soups','MISC','NA','NA',0),
                                                                                                 (34,'Juice','MISC','NA','NA',0),
                                                                                                 (35,'Snacks','MISC','NA','NA',0),
-                                                                                                (36,'Starters','MISC','NA','NA',0),
-                                                                                                (37,'Leftover','MISC','NA','NA',0);
+                                                                                                (36,'Starters','MISC','NA','NA',0);
 
 

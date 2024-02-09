@@ -7,7 +7,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -26,15 +25,9 @@ public class ItemtypeEntity {
   @Column(unique = true)
   private String type;
 
-  @NotNull
-  @Enumerated(value = EnumType.STRING)
-  private Unit stockUnit;
+  private int storageLife;
 
-  @NotNull
-  @Enumerated(value = EnumType.STRING)
-  private Unit recipeUnit;
-
-  private int refill;
+  private boolean freshFridge;
 
   @OneToMany(mappedBy = "itemtype")
   private Set<ItemEntity> items;
