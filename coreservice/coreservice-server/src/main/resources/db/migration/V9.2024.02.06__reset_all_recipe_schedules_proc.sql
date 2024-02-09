@@ -28,7 +28,7 @@ BEGIN
                                       r.id
                                FROM recipe r
                                         join programmedhousehold.category c on r.category_id = c.category_id
-                               WHERE day != 'NA'
+                               WHERE day != 'NA' AND c.name != 'Leftover'
                                  AND r.is_active
                                GROUP BY 2, 3, 4, 5
                                ORDER BY 1, 2;
@@ -54,6 +54,7 @@ BEGIN
                      JOIN programmedhousehold.category c ON c.category_id = r.category_id
             WHERE c.meal = schedule_Meal
               AND c.day = schedule_Day
+              AND c.name != 'Leftover'
             LIMIT 1;
             IF recent_scheduled_Dt IS NOT NULL THEN
                 SET future_schedule_Dt = DATE_ADD(recent_scheduled_Dt, INTERVAL 7 DAY); -- Example calculation
