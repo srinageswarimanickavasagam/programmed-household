@@ -215,7 +215,7 @@ public class RecipeServiceImpl implements IRecipeService {
                 ingredientQtyMap.put(
                     recipeItem.getItem().getName(),
                     formatQty(recipeItem.getRequiredQty())
-                        + recipeItem.getItem().getItemtype().getRecipeUnit().getLabel());
+                        + recipeItem.getItem().getRecipeUnit().getLabel());
               });
           ingredients.put(culinaryStep.getLabel(), ingredientQtyMap);
         });
@@ -223,7 +223,7 @@ public class RecipeServiceImpl implements IRecipeService {
     return recipeResponseDTO;
   }
 
-  private String formatQty(BigDecimal qty) {
+  public static String formatQty(BigDecimal qty) {
     return (qty.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0)
         ? String.valueOf(qty.intValue())
         : qty.stripTrailingZeros().toPlainString();

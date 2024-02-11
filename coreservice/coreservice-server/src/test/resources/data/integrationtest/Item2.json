@@ -3,5 +3,7 @@
   "name":"IdliRice",
   "itemStockQty":250,
   "stockedAt":"2023-12-28",
-  "itemtype": 2
+  "itemtype": 2,
+  "stockUnit" : "GRAM",
+  "recipeUnit":"GRAM"
 }

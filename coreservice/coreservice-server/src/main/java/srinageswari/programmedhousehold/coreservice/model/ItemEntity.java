@@ -1,6 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -31,11 +33,21 @@ public class ItemEntity {
   @JoinColumn(name = "type_id")
   ItemtypeEntity itemtype;
 
+  @NotNull
+  @Enumerated(value = EnumType.STRING)
+  private Unit stockUnit;
+
+  @NotNull
+  @Enumerated(value = EnumType.STRING)
+  private Unit recipeUnit;
+
   private int itemStockQty;
 
   private BigDecimal amount;
 
   private Date stockedDt;
+
+  private boolean inStock;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
   private Set<RecipeItemEntity> recipeItems = new HashSet<>();

@@ -31,9 +31,8 @@ CREATE TABLE programmedhousehold.`category` (
 CREATE TABLE programmedhousehold.`itemtype` (
                                                 `type_id` bigint NOT NULL AUTO_INCREMENT,
                                                 `type` varchar(255) NOT NULL,
-                                                `refill` int DEFAULT 7,
-                                                `stock_unit` varchar(255) NOT NULL,
-                                                `recipe_unit` varchar(255) NOT NULL,
+                                                `fresh_fridge` bit(1) DEFAULT 1,
+                                                `storage_life` int DEFAULT 7,
                                                 PRIMARY KEY (`type_id`),
                                                 UNIQUE (`type`)
 );
@@ -46,6 +45,9 @@ CREATE TABLE programmedhousehold.`item` (
                                             `item_stock_qty` int DEFAULT 0,
                                             `stocked_dt` datetime(6) DEFAULT NULL,
                                             `type_id` bigint DEFAULT NULL,
+                                            `in_stock` bit(1) DEFAULT 1,
+                                            `stock_unit` varchar(255) DEFAULT NULL,
+                                            `recipe_unit` varchar(255) DEFAULT NULL,
                                             PRIMARY KEY (`id`),
                                             UNIQUE (`name`),
                                             FOREIGN KEY (`type_id`) REFERENCES `itemtype` (`type_id`)

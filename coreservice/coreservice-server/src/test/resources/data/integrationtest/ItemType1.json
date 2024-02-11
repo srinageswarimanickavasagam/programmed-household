@@ -1,6 +1,4 @@
 {
   "typeId" : 1,
-  "type" : "Meat&Poultry",
-  "stockUnit" : "GRAM",
-  "recipeUnit":"GRAM"
+  "type" : "Meat&Poultry"
 }

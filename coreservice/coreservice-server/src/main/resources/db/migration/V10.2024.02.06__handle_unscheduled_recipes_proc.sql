@@ -14,7 +14,7 @@ BEGIN
             SELECT DISTINCT c.day, c.meal
             FROM programmedhousehold.recipe r
                      JOIN programmedhousehold.category c ON r.category_id = c.category_id
-            WHERE c.day != 'NA' AND c.name != 'Leftover'
+            WHERE c.day != 'NA'
               AND r.is_active
               AND r.scheduled_dt IS NULL;
 
@@ -58,7 +58,6 @@ BEGIN
                     WHERE r.is_active
                       AND c.day = unscheduled_Day
                       AND c.meal = unscheduled_Meal
-                      AND c.name != 'Leftover'
                     GROUP BY 2, 3, 4, 5
                     ORDER BY 1, 2;
 
@@ -70,8 +69,7 @@ BEGIN
                     JOIN programmedhousehold.category c ON r.category_id = c.category_id
                 SET r.scheduled_dt = NULL
                 WHERE c.meal = unscheduled_Meal
-                  AND c.day = unscheduled_Day
-                  AND c.name != 'Leftover';
+                  AND c.day = unscheduled_Day;
 
                 -- Open inner cursor
                 OPEN reschedule_recipe_cur;
@@ -89,7 +87,6 @@ BEGIN
                              JOIN programmedhousehold.category c ON c.category_id = r.category_id
                     WHERE c.meal = reschedule_Meal
                       AND c.day = reschedule_Day
-                      AND c.name != 'Leftover'
                     LIMIT 1;
 
                     IF recent_scheduled_Dt IS NOT NULL THEN
