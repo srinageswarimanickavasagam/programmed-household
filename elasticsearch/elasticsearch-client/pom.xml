@@ -9,6 +9,13 @@
 		<version>1.0.0.RELEASE</version>
 	</parent>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+	</dependencies>
+
 	<properties>
 <!--		build a multi-module Maven project without a main class-->
 		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>

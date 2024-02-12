@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
+import srinageswari.programmedhousehold.coreservice.common.RecipeUtil;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.ElementAlreadyExistsException;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
@@ -24,7 +25,6 @@ import srinageswari.programmedhousehold.coreservice.model.ItemEntity;
 import srinageswari.programmedhousehold.coreservice.model.ItemtypeEntity;
 import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
 import srinageswari.programmedhousehold.coreservice.service.leftover.LeftoverService;
-import srinageswari.programmedhousehold.coreservice.service.recipe.RecipeServiceImpl;
 
 /**
  * @author smanickavasagam
@@ -157,7 +157,7 @@ public class ItemServiceImpl implements IItemService {
     perishableItemsDTO.setId(itemEntity.getId());
     perishableItemsDTO.setName(itemEntity.getName());
     perishableItemsDTO.setQuantity(
-        RecipeServiceImpl.formatQty(BigDecimal.valueOf(itemEntity.getItemStockQty()))
+        RecipeUtil.formatQty(BigDecimal.valueOf(itemEntity.getItemStockQty()))
             + itemEntity.getStockUnit().getLabel());
     if (itemEntity.getStockedDt() != null) {
       perishableItemsDTO.setStorageDt(itemEntity.getStockedDt());

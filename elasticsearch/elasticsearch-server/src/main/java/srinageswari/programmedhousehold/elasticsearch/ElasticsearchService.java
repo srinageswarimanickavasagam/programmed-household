@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
 import srinageswari.programmedhousehold.elasticsearch.common.ElasticsearchIndexInitializer;
-import srinageswari.programmedhousehold.elasticsearch.common.ElasticsearchUtil;
 import srinageswari.programmedhousehold.elasticsearch.dto.BulkInsertResponseDTO;
 import srinageswari.programmedhousehold.elasticsearch.dto.IndexResponseDTO;
 import srinageswari.programmedhousehold.elasticsearch.dto.RecipeSearchDTO;
@@ -31,15 +29,14 @@ public class ElasticsearchService {
 
   private static final Logger logger = LoggerFactory.getLogger(ElasticsearchIndexInitializer.class);
   private final ElasticsearchClient elasticsearchClient;
-  private final ElasticsearchUtil elasticsearchUtil;
 
-  public RecipeSearchDTO saveToElasticsearch(RecipeDTO recipe) throws IOException {
+  public RecipeSearchDTO saveToElasticsearch(RecipeSearchDTO recipe) throws IOException {
     IndexResponse indexResponse =
         elasticsearchClient.index(
             i ->
                 i.index(RECIPE_INDEX_NAME)
-                    .id(String.valueOf(recipe.getId()))
-                    .document(elasticsearchUtil.getRecipeSearchDocument(recipe)));
+                    .id(String.valueOf(recipe.getRecipeId()))
+                    .document(recipe));
 
     return elasticsearchClient
         .get(
@@ -48,17 +45,17 @@ public class ElasticsearchService {
         .source();
   }
 
-  public BulkInsertResponseDTO bulkInsert(List<RecipeDTO> recipeDTOS) throws IOException {
+  public BulkInsertResponseDTO bulkInsert(List<RecipeSearchDTO> recipeDTOS) throws IOException {
     BulkRequest.Builder br = new BulkRequest.Builder();
 
-    for (RecipeDTO recipeDTO : recipeDTOS) {
+    for (RecipeSearchDTO recipeDTO : recipeDTOS) {
       br.operations(
           op ->
               op.create(
                   c ->
                       c.index(RECIPE_INDEX_NAME)
-                          .id(String.valueOf(recipeDTO.getId()))
-                          .document(elasticsearchUtil.getRecipeSearchDocument(recipeDTO))));
+                          .id(String.valueOf(recipeDTO.getRecipeId()))
+                          .document(recipeDTO)));
     }
 
     BulkResponse result = elasticsearchClient.bulk(br.build());
@@ -126,13 +123,13 @@ public class ElasticsearchService {
     // Execute the search request
     SearchResponse<RecipeSearchDTO> response =
         elasticsearchClient.search(searchRequest, RecipeSearchDTO.class);
-    List<RecipeSearchDTO> recipeSearchDTOS = new ArrayList<>();
+    List<RecipeSearchDTO> recipeDTOS = new ArrayList<>();
     List<Hit<RecipeSearchDTO>> searchHits = response.hits().hits();
 
     searchHits.forEach(
         hit -> {
-          recipeSearchDTOS.add(hit.source());
+          recipeDTOS.add(hit.source());
         });
-    return recipeSearchDTOS;
+    return recipeDTOS;
   }
 }

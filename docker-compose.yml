@@ -99,6 +99,8 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
+      elasticsearch:
+        condition: service_started
     networks:
       - ph-net
 
