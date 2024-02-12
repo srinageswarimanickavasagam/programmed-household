@@ -2,11 +2,11 @@
   "id": "1",
   "name":"Chicken",
   "itemStockQty":250,
-  "unit":"GRAM",
   "stockedDt":"2023-12-28",
+  "stockUnit" : "GRAM",
+  "recipeUnit":"GRAM",
   "itemtype":
    {
      "typeId": 1
-   },
-  "essential": false
+   }
 }

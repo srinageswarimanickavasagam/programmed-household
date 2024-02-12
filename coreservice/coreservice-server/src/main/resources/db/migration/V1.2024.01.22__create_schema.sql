@@ -31,6 +31,8 @@ CREATE TABLE programmedhousehold.`category` (
 CREATE TABLE programmedhousehold.`itemtype` (
                                                 `type_id` bigint NOT NULL AUTO_INCREMENT,
                                                 `type` varchar(255) NOT NULL,
+                                                `fresh_fridge` bit(1) DEFAULT 1,
+                                                `storage_life` int DEFAULT 7,
                                                 PRIMARY KEY (`type_id`),
                                                 UNIQUE (`type`)
 );
@@ -39,13 +41,13 @@ CREATE TABLE programmedhousehold.`itemtype` (
 CREATE TABLE programmedhousehold.`item` (
                                             `id` bigint NOT NULL AUTO_INCREMENT,
                                             `amount` DECIMAL(7,2) DEFAULT 0.0,
-                                            `is_essential` bit(1) NOT NULL,
                                             `name` varchar(50) NOT NULL,
                                             `item_stock_qty` int DEFAULT 0,
                                             `stocked_dt` datetime(6) DEFAULT NULL,
-                                            `unit` varchar(255) DEFAULT NULL,
                                             `type_id` bigint DEFAULT NULL,
-                                            `refill` int DEFAULT 30,
+                                            `in_stock` bit(1) DEFAULT 1,
+                                            `stock_unit` varchar(255) DEFAULT NULL,
+                                            `recipe_unit` varchar(255) DEFAULT NULL,
                                             PRIMARY KEY (`id`),
                                             UNIQUE (`name`),
                                             FOREIGN KEY (`type_id`) REFERENCES `itemtype` (`type_id`)
@@ -78,7 +80,6 @@ CREATE TABLE programmedhousehold.`recipe_item` (
                                                    `item_id` bigint NOT NULL,
                                                    `recipe_id` bigint UNSIGNED NOT NULL,
                                                    `required_qty` DECIMAL(5,2) NOT NULL,
-                                                   `unit` varchar(255) NOT NULL,
                                                    `culinary_step` varchar(20) NOT NULL,
                                                    PRIMARY KEY (`item_id`,`recipe_id`,`culinary_step`),
                                                    FOREIGN KEY (`recipe_id`) REFERENCES `recipe` (`id`),

@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import srinageswari.programmedhousehold.coreservice.enums.CulinaryStep;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -19,8 +18,6 @@ public class RecipeItemDTO {
   private RecipeDTO recipe;
 
   @NotNull private ItemDTO item;
-
-  @NotNull private Unit unit;
 
   @NotNull private BigDecimal requiredQty;
 

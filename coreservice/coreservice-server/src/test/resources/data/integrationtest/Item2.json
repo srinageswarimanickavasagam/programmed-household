@@ -2,9 +2,8 @@
   "id": 2,
   "name":"IdliRice",
   "itemStockQty":250,
-  "unit":"GRAM",
   "stockedAt":"2023-12-28",
   "itemtype": 2,
-  "essential": true,
-  "refill": 30
+  "stockUnit" : "GRAM",
+  "recipeUnit":"GRAM"
 }

@@ -1,6 +1,5 @@
 package srinageswari.programmedhousehold.coreservice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import srinageswari.programmedhousehold.coreservice.enums.CulinaryStep;
-import srinageswari.programmedhousehold.coreservice.enums.Unit;
 
 /**
  * @author smanickavasagam
@@ -28,7 +26,6 @@ public class RecipeItemEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @MapsId("recipeId")
   @JoinColumn(name = "recipe_id", referencedColumnName = "id", columnDefinition = "bigint UNSIGNED")
-  @JsonBackReference
   private RecipeEntity recipe;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -36,23 +33,14 @@ public class RecipeItemEntity {
   @JoinColumn(name = "item_id", referencedColumnName = "id")
   private ItemEntity item;
 
-  @Column(nullable = false)
-  @Enumerated(value = EnumType.STRING)
-  private Unit unit;
-
   @Enumerated(value = EnumType.STRING)
   CulinaryStep culinaryStep;
 
   public RecipeItemEntity(
-      RecipeEntity recipe,
-      ItemEntity item,
-      Unit unit,
-      BigDecimal requiredQty,
-      CulinaryStep culinaryStep) {
+      RecipeEntity recipe, ItemEntity item, BigDecimal requiredQty, CulinaryStep culinaryStep) {
     this.recipeItemId = new RecipeItemId(recipe.getId(), item.getId());
     this.recipe = recipe;
     this.item = item;
-    this.unit = unit;
     this.requiredQty = requiredQty;
     this.culinaryStep = culinaryStep;
   }

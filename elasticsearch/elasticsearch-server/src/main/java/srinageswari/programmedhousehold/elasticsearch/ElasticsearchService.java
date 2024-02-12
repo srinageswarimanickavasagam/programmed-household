@@ -8,7 +8,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.WildcardQuery;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,6 @@ import srinageswari.programmedhousehold.elasticsearch.dto.ShardsDTO;
 public class ElasticsearchService {
 
   private static final Logger logger = LoggerFactory.getLogger(ElasticsearchIndexInitializer.class);
-  private static final ObjectMapper objectMapper = new ObjectMapper();
   private final ElasticsearchClient elasticsearchClient;
   private final ElasticsearchUtil elasticsearchUtil;
 

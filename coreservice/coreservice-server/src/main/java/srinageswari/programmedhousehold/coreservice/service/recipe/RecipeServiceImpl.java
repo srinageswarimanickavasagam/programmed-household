@@ -2,8 +2,12 @@ package srinageswari.programmedhousehold.coreservice.service.recipe;
 
 import static org.apache.commons.text.WordUtils.capitalizeFully;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,11 +19,11 @@ import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.common.exception.helper.NoSuchElementFoundException;
 import srinageswari.programmedhousehold.coreservice.common.search.SearchSpecification;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
+import srinageswari.programmedhousehold.coreservice.dto.RecipeResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
+import srinageswari.programmedhousehold.coreservice.enums.CulinaryStep;
 import srinageswari.programmedhousehold.coreservice.mapper.RecipeMapper;
 import srinageswari.programmedhousehold.coreservice.model.*;
-import srinageswari.programmedhousehold.coreservice.repository.ItemRepository;
-import srinageswari.programmedhousehold.coreservice.repository.ItemtypeRepository;
 import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 import srinageswari.programmedhousehold.coreservice.service.appuser.AppUserServiceImpl;
 import srinageswari.programmedhousehold.coreservice.service.recipeitem.RecipeItemServiceImpl;
@@ -33,10 +37,8 @@ import srinageswari.programmedhousehold.coreservice.service.recipeitem.RecipeIte
 @RequiredArgsConstructor
 public class RecipeServiceImpl implements IRecipeService {
   private final RecipeRepository recipeRepository;
-  private final ItemRepository itemRepository;
   private final RecipeMapper recipeMapper;
   private final AppUserServiceImpl appUserServiceImpl;
-  private final ItemtypeRepository itemtypeRepository;
   private final ElasticsearchService elasticsearchService;
   private final RecipeItemServiceImpl recipeItemServiceImpl;
 
@@ -50,10 +52,10 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return
    */
   @Transactional(readOnly = true)
-  public RecipeDTO findById(Long id) {
+  public RecipeResponseDTO findById(Long id) {
     return recipeRepository
         .findById(id)
-        .map(recipeMapper::toDto)
+        .map(this::getRecipeResponseDTO)
         .orElseThrow(
             () -> {
               log.error(Constants.NOT_FOUND_RECIPE);
@@ -68,11 +70,11 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return Paginated recipe data
    */
   @Transactional(readOnly = true)
-  public Page<RecipeDTO> findAll(SearchRequestDTO request) {
+  public Page<RecipeResponseDTO> findAll(SearchRequestDTO request) {
     final SearchSpecification<RecipeEntity> specification = new SearchSpecification<>(request);
     final Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
-    final Page<RecipeDTO> recipes =
-        recipeRepository.findAll(specification, pageable).map(recipeMapper::toDto);
+    final Page<RecipeResponseDTO> recipes =
+        recipeRepository.findAll(specification, pageable).map(this::getRecipeResponseDTO);
     if (recipes.isEmpty()) {
       log.error(Constants.NOT_FOUND_RECORD);
       throw new NoSuchElementFoundException(Constants.NOT_FOUND_RECORD);
@@ -87,16 +89,16 @@ public class RecipeServiceImpl implements IRecipeService {
    * @return
    */
   @Transactional
-  public RecipeDTO create(RecipeDTO request) {
+  public RecipeResponseDTO create(RecipeDTO request) {
     RecipeEntity recipe = recipeRepository.save(constructRecipeEntity(request));
-    return recipeMapper.toDto(recipe);
+    return getRecipeResponseDTO(recipe);
   }
 
   @Transactional
-  public List<RecipeDTO> bulkInsert(List<RecipeDTO> recipeDTOList) {
+  public List<RecipeResponseDTO> bulkInsert(List<RecipeDTO> recipeDTOList) {
     List<RecipeEntity> entities = recipeDTOList.stream().map(this::constructRecipeEntity).toList();
     List<RecipeEntity> response = recipeRepository.saveAll(entities);
-    return response.stream().map(recipeMapper::toDto).toList();
+    return response.stream().map(this::getRecipeResponseDTO).toList();
   }
 
   /**
@@ -107,7 +109,7 @@ public class RecipeServiceImpl implements IRecipeService {
    */
   @Transactional
   // for adding/removing items for a current recipe, use RecipeItemService methods
-  public RecipeDTO update(RecipeDTO request) {
+  public RecipeResponseDTO update(RecipeDTO request) {
     final RecipeEntity recipeEntity =
         recipeRepository
             .findById(request.getId())
@@ -123,7 +125,7 @@ public class RecipeServiceImpl implements IRecipeService {
     recipeEntity.setServings(request.getServings());
     recipeEntity.setInstructions(request.getInstructions());
     recipeEntity.setHealthLabel(request.getHealthLabel());
-    return recipeMapper.toDto(recipeRepository.save(recipeEntity));
+    return getRecipeResponseDTO(recipeRepository.save(recipeEntity));
   }
 
   /**
@@ -144,8 +146,10 @@ public class RecipeServiceImpl implements IRecipeService {
     recipeRepository.delete(recipeEntity);
   }
 
-  public List<RecipeDTO> getRecipeByCategoryId(Long id) {
-    return recipeRepository.findrecipesByCategoryId(id).stream().map(recipeMapper::toDto).toList();
+  public List<RecipeResponseDTO> getRecipeByCategoryId(Long id) {
+    return recipeRepository.findRecipesByCategoryId(id).stream()
+        .map(this::getRecipeResponseDTO)
+        .toList();
   }
 
   public RecipeEntity constructRecipeEntity(RecipeDTO request) {
@@ -159,7 +163,6 @@ public class RecipeServiceImpl implements IRecipeService {
                     new RecipeItemEntity(
                         recipeEntity,
                         recipeItemServiceImpl.processRecipeItem(recipeItemDTO),
-                        recipeItemDTO.getUnit(),
                         recipeItemDTO.getRequiredQty(),
                         recipeItemDTO.getCulinaryStep())));
     recipeEntity.setAppUser(
@@ -174,5 +177,55 @@ public class RecipeServiceImpl implements IRecipeService {
 
     // Combine the most and least significant bits to create a long value
     return (mostSigBits & Long.MAX_VALUE) ^ (leastSigBits & Long.MAX_VALUE);
+  }
+
+  public RecipeResponseDTO getRecipeResponseDTO(RecipeEntity recipe) {
+
+    RecipeResponseDTO recipeResponseDTO = new RecipeResponseDTO();
+    recipeResponseDTO.setRecipeId(recipe.getId());
+    recipeResponseDTO.setTitle(recipe.getTitle());
+    recipeResponseDTO.setReference(recipe.getReference());
+    recipeResponseDTO.setPrepTime(recipe.getPrepTime());
+    recipeResponseDTO.setCookTime(recipe.getCookTime());
+    recipeResponseDTO.setInstructions(recipe.getInstructions());
+    recipeResponseDTO.setHealthLabel(
+        recipe.getHealthLabel() != null ? recipe.getHealthLabel().getLabel() : null);
+    recipeResponseDTO.setCuisine(recipe.getCuisine().getLabel());
+    recipeResponseDTO.setCategory(recipe.getCategory().getName());
+    recipeResponseDTO.setMeal(recipe.getCategory().getMeal().getLabel());
+    recipeResponseDTO.setScheduleDay(
+        recipe.getCategory().getDay() != null ? recipe.getCategory().getDay().getLabel() : null);
+    recipeResponseDTO.setDifficulty(recipe.getCategory().getDifficulty().getLabel());
+    recipeResponseDTO.setSideDish(recipe.getCategory().isSidedish());
+    recipeResponseDTO.setScheduledOn(
+        recipe.getScheduledDt() != null ? recipe.getScheduledDt().toString() : null);
+    recipeResponseDTO.setNotes(recipe.getNotes());
+
+    Map<CulinaryStep, List<RecipeItemEntity>> groupedByCulinaryStep =
+        recipe.getRecipeItems().stream()
+            .collect(Collectors.groupingBy(RecipeItemEntity::getCulinaryStep));
+
+    Map<String, Map<String, String>> ingredients = new HashMap<>();
+
+    groupedByCulinaryStep.forEach(
+        (culinaryStep, recipeItems) -> {
+          Map<String, String> ingredientQtyMap = new HashMap<>();
+          recipeItems.forEach(
+              recipeItem -> {
+                ingredientQtyMap.put(
+                    recipeItem.getItem().getName(),
+                    formatQty(recipeItem.getRequiredQty())
+                        + recipeItem.getItem().getRecipeUnit().getLabel());
+              });
+          ingredients.put(culinaryStep.getLabel(), ingredientQtyMap);
+        });
+    recipeResponseDTO.setIngredientsCulinaryStepMap(ingredients);
+    return recipeResponseDTO;
+  }
+
+  public static String formatQty(BigDecimal qty) {
+    return (qty.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0)
+        ? String.valueOf(qty.intValue())
+        : qty.stripTrailingZeros().toPlainString();
   }
 }

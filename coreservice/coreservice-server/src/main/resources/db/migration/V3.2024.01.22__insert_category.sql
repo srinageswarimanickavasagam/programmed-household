@@ -16,7 +16,7 @@ INSERT INTO programmedhousehold.category (category_id, name, meal, day, difficul
                                                                                                 (16,'VarietyRice','LUNCH','THURSDAY','EASY',0),
                                                                                                 (17,'Dal Based Recipe','LUNCH','WEDNESDAY','HARD',0),
                                                                                                 (18,'TamarindGravy','LUNCH','FRIDAY','MODERATE',1),
-                                                                                                (19,'Pasta','DINNER','SUNDAY','EASY',0),
+                                                                                                (19,'Pasta','DINNER','TUESDAY','EASY',0),
                                                                                                 (20,'Soups&Noodles meal','DINNER','SUNDAY','EASY',0),
                                                                                                 (21,'Paratha','DINNER','MONDAY','MODERATE',0),
                                                                                                 (22,'Idli-Chutney','DINNER','SATURDAY','EASY',1),
@@ -33,7 +33,6 @@ INSERT INTO programmedhousehold.category (category_id, name, meal, day, difficul
                                                                                                 (33,'Soups','MISC','NA','NA',0),
                                                                                                 (34,'Juice','MISC','NA','NA',0),
                                                                                                 (35,'Snacks','MISC','NA','NA',0),
-                                                                                                (36,'Starters','MISC','NA','NA',0),
-                                                                                                (37,'Leftover','MISC','NA','NA',0);
+                                                                                                (36,'Starters','MISC','NA','NA',0);
 
 

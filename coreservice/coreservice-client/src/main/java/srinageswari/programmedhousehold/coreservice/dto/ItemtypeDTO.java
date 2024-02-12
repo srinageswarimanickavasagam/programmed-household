@@ -15,4 +15,10 @@ public class ItemtypeDTO {
   @JsonProperty("type")
   @NotNull
   private String type;
+
+  @JsonProperty("storageLife")
+  private int storageLife;
+
+  @JsonProperty("freshFridge")
+  private boolean freshFridge;
 }

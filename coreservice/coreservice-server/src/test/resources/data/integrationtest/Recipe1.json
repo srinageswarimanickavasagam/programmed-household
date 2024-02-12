@@ -23,8 +23,7 @@
         }
       },
       "culinaryStep": "MARINATE",
-      "requiredQty": 200,
-      "unit": "GRAM"
+      "requiredQty": 200
     }
   ]
 }

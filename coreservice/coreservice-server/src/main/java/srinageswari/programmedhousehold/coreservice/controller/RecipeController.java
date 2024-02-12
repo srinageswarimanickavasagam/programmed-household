@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import srinageswari.programmedhousehold.coreservice.common.Constants;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeDTO;
+import srinageswari.programmedhousehold.coreservice.dto.RecipeResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.APIResponseDTO;
 import srinageswari.programmedhousehold.coreservice.dto.common.SearchRequestDTO;
 import srinageswari.programmedhousehold.coreservice.service.recipe.IRecipeService;
@@ -34,8 +35,8 @@ public class RecipeController {
    * @return A single recipe
    */
   @GetMapping("/recipe/{id}")
-  public ResponseEntity<APIResponseDTO<RecipeDTO>> findById(@PathVariable long id) {
-    final RecipeDTO response = recipeService.findById(id);
+  public ResponseEntity<APIResponseDTO<RecipeResponseDTO>> findById(@PathVariable long id) {
+    final RecipeResponseDTO response = recipeService.findById(id);
     return ResponseEntity.ok(
         new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
@@ -47,9 +48,9 @@ public class RecipeController {
    * @return Paginated recipe data
    */
   @GetMapping("/recipes")
-  public ResponseEntity<APIResponseDTO<Page<RecipeDTO>>> findAll(
+  public ResponseEntity<APIResponseDTO<Page<RecipeResponseDTO>>> findAll(
       @RequestBody SearchRequestDTO request) {
-    final Page<RecipeDTO> response = recipeService.findAll(request);
+    final Page<RecipeResponseDTO> response = recipeService.findAll(request);
     return ResponseEntity.ok(
         new APIResponseDTO<>(
             LocalDateTime.now(), Constants.SUCCESS, response, response.getTotalElements()));
@@ -61,9 +62,9 @@ public class RecipeController {
    * @return id of the created recipe
    */
   @PostMapping("/recipe")
-  public ResponseEntity<APIResponseDTO<RecipeDTO>> create(
+  public ResponseEntity<APIResponseDTO<RecipeResponseDTO>> create(
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
-    final RecipeDTO response = recipeService.create(request);
+    final RecipeResponseDTO response = recipeService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
@@ -74,9 +75,9 @@ public class RecipeController {
    * @return size of the created recipe
    */
   @PostMapping("/bulkinsert/recipes")
-  public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> bulkInsert(
+  public ResponseEntity<APIResponseDTO<List<RecipeResponseDTO>>> bulkInsert(
       @RequestBody List<RecipeDTO> recipeDTOS) {
-    final List<RecipeDTO> response = recipeService.bulkInsert(recipeDTOS);
+    final List<RecipeResponseDTO> response = recipeService.bulkInsert(recipeDTOS);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(
             new APIResponseDTO<>(
@@ -89,9 +90,9 @@ public class RecipeController {
    * @return id of the updated recipe
    */
   @PutMapping("/recipe")
-  public ResponseEntity<APIResponseDTO<RecipeDTO>> update(
+  public ResponseEntity<APIResponseDTO<RecipeResponseDTO>> update(
       @Valid @ValidItem(message = Constants.NOT_VALIDATED_ITEM) @RequestBody RecipeDTO request) {
-    final RecipeDTO response = recipeService.update(request);
+    final RecipeResponseDTO response = recipeService.update(request);
     return ResponseEntity.ok(
         new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, 1));
   }
@@ -108,8 +109,9 @@ public class RecipeController {
   }
 
   @GetMapping("/recipes/category/{category_id}")
-  public ResponseEntity<APIResponseDTO<List<RecipeDTO>>> search(@PathVariable long category_id) {
-    final List<RecipeDTO> response = recipeService.getRecipeByCategoryId(category_id);
+  public ResponseEntity<APIResponseDTO<List<RecipeResponseDTO>>> search(
+      @PathVariable long category_id) {
+    final List<RecipeResponseDTO> response = recipeService.getRecipeByCategoryId(category_id);
     return ResponseEntity.ok(
         new APIResponseDTO<>(LocalDateTime.now(), Constants.SUCCESS, response, response.size()));
   }

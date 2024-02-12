@@ -15,7 +15,6 @@ import srinageswari.programmedhousehold.coreservice.enums.Unit;
 @Data
 @NoArgsConstructor
 public class ItemDTO {
-
   @JsonProperty("itemId")
   private Long id;
 
@@ -29,9 +28,6 @@ public class ItemDTO {
   @JsonProperty("amount")
   private BigDecimal amount;
 
-  @JsonProperty("unit")
-  private Unit unit;
-
   @JsonProperty("stockedDt")
   private Date stockedDt;
 
@@ -39,9 +35,14 @@ public class ItemDTO {
   @NotNull
   private ItemtypeDTO itemtype;
 
-  @JsonProperty("essential")
-  private boolean essential;
+  @JsonProperty("inStock")
+  private boolean inStock;
 
-  @JsonProperty("refill")
-  private int refill;
+  @JsonProperty("stockUnit")
+  @NotNull
+  private Unit stockUnit;
+
+  @JsonProperty("recipeUnit")
+  @NotNull
+  private Unit recipeUnit;
 }

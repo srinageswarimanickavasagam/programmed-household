@@ -6,12 +6,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import srinageswari.programmedhousehold.coreservice.enums.CulinaryStep;
 import srinageswari.programmedhousehold.coreservice.model.RecipeEntity;
 import srinageswari.programmedhousehold.coreservice.model.RecipeItemEntity;
 
-@Component
+@Service
 public class ElasticsearchService {
 
   public String saveToElasticsearch(RecipeEntity recipe) {
@@ -54,8 +54,7 @@ public class ElasticsearchService {
           recipeItems.forEach(
               recipeItem -> {
                 recipeItemJsonObject.put(
-                    recipeItem.getItem().getName(),
-                    recipeItem.getRequiredQty().toString() + recipeItem.getUnit().getLabel());
+                    recipeItem.getItem().getName(), recipeItem.getRequiredQty().toString());
               });
           allIngredients.set(culinaryStep.getLabel(), recipeItemJsonObject);
         });

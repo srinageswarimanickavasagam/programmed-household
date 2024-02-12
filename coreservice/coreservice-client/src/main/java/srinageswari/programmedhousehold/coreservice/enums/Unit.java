@@ -9,7 +9,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Unit {
-  KILOGRAM("kg"),
   GRAM("g"),
   MILLILITER("ml"),
   LITRE("l"),
@@ -17,7 +16,9 @@ public enum Unit {
   TABLESPOON("tbsp"),
   CUP("cup"),
   COUNT("count"),
-  PACK("pack");
+  PACK("pack"),
+  FEW("few"),
+  NA("not applicable");
 
   private final String label;
 }

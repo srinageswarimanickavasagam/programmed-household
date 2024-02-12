@@ -52,7 +52,8 @@ public class ElasticsearchUtil {
               recipeItem -> {
                 ingredientQtyMap.put(
                     recipeItem.getItem().getName(),
-                    formatQty(recipeItem.getRequiredQty()) + recipeItem.getUnit().getLabel());
+                    formatQty(recipeItem.getRequiredQty())
+                        + recipeItem.getItem().getRecipeUnit().getLabel());
               });
           ingredients.put(culinaryStep.getLabel(), ingredientQtyMap);
         });

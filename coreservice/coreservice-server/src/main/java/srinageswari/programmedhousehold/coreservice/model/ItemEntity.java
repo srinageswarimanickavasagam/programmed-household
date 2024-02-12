@@ -1,6 +1,7 @@
 package srinageswari.programmedhousehold.coreservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,12 +29,17 @@ public class ItemEntity {
   @Column(unique = true, nullable = false, length = 50)
   private String name;
 
-  @Enumerated(value = EnumType.STRING)
-  private Unit unit;
-
   @ManyToOne
   @JoinColumn(name = "type_id")
   ItemtypeEntity itemtype;
+
+  @NotNull
+  @Enumerated(value = EnumType.STRING)
+  private Unit stockUnit;
+
+  @NotNull
+  @Enumerated(value = EnumType.STRING)
+  private Unit recipeUnit;
 
   private int itemStockQty;
 
@@ -41,9 +47,7 @@ public class ItemEntity {
 
   private Date stockedDt;
 
-  private boolean isEssential;
-
-  private int refill;
+  private boolean inStock;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
   private Set<RecipeItemEntity> recipeItems = new HashSet<>();

@@ -25,6 +25,10 @@ public class ItemtypeEntity {
   @Column(unique = true)
   private String type;
 
+  private int storageLife;
+
+  private boolean freshFridge;
+
   @OneToMany(mappedBy = "itemtype")
   private Set<ItemEntity> items;
 
