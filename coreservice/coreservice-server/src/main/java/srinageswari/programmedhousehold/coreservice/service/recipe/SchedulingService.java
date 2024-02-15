@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import srinageswari.programmedhousehold.coreservice.common.RecipeUtil;
 import srinageswari.programmedhousehold.coreservice.dto.RecipeResponseDTO;
 import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 
@@ -15,7 +16,6 @@ import srinageswari.programmedhousehold.coreservice.repository.RecipeRepository;
 @RequiredArgsConstructor
 public class SchedulingService {
   private final RecipeRepository recipeRepository;
-  private final RecipeServiceImpl recipeServiceImpl;
 
   public void resetAllRecipeSchedules(LocalDate startDt) {
     recipeRepository.resetAllRecipeSchedules(startDt);
@@ -28,7 +28,7 @@ public class SchedulingService {
 
   public List<RecipeResponseDTO> getTodaysRecipes() {
     return recipeRepository.queryTodaysRecipes().stream()
-        .map(recipeServiceImpl::getRecipeResponseDTO)
+        .map(RecipeUtil::getRecipeResponseDTO)
         .toList();
   }
 
@@ -36,19 +36,19 @@ public class SchedulingService {
     LocalDate startDt = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     LocalDate endDt = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
     return recipeRepository.findRecipesBetweenDates(startDt, endDt).stream()
-        .map(recipeServiceImpl::getRecipeResponseDTO)
+        .map(RecipeUtil::getRecipeResponseDTO)
         .toList();
   }
 
   public List<RecipeResponseDTO> findRecipesBetweenDates(LocalDate startDt, LocalDate endDt) {
     return recipeRepository.findRecipesBetweenDates(startDt, endDt).stream()
-        .map(recipeServiceImpl::getRecipeResponseDTO)
+        .map(RecipeUtil::getRecipeResponseDTO)
         .toList();
   }
 
   public List<RecipeResponseDTO> getRecipesOnSelectedDates(List<LocalDate> selectedDates) {
     return recipeRepository.getRecipesOnSelectedDates(selectedDates).stream()
-        .map(recipeServiceImpl::getRecipeResponseDTO)
+        .map(RecipeUtil::getRecipeResponseDTO)
         .toList();
   }
 }
