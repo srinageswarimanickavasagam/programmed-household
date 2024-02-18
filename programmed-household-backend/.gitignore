@@ -15,11 +15,8 @@
 .settings/
 
 # BEGIN ideaJ files
-.../.idea
+../.idea
 .iml
-*/*/*.iml
-*/*/*/*.iml
-
 # END ideaJ files
 
 # BEGIN Gradle temp files
@@ -27,18 +24,16 @@
 # END Gradle temp files
 war.gradle
 
+/target
 */target
 */*/target
 */*/*/target
-*/*/*/*/target
+eventhandler/eventhandler-server/target/
+elasticsearch/elasticsearch-server/target/
 
 */.mvn/
-*/*/.mvn/
 
 .idea/
-*/.idea/
-
-*/.gitattributes
 
 # BEGIN Gradle build folder
 build
@@ -123,33 +118,3 @@ Thumbs.db
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-
-# Dependency directories
-*/node_modules/
-*/.pnpm/
-yarn-error.log
-package-lock.json
-public/
-
-# Environment variables
-*/.env
-*/.env.local
-*/.env.development.local
-*/.env.test.local
-*/.env.production.local
-
-# Built output
-*/dist/
-*/build/
-*/out/
-
-# IDE and editor files
-*/.vscode/
-*/.idea/
-*/*.suo
-*/*.ntvs*
-*/*.njsproj
-*/*.sln
-*/*.sw?
-*/.DS_Store

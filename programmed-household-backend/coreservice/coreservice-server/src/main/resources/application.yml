@@ -1,0 +1,79 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: programmed-household
+
+server:
+  port: 5000
+  servlet:
+    session:
+      timeout: 60m
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  flyway:
+    url: ${SPRING_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    locations: classpath:db/migration
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_DATASOURCE_HIKARI_DDL_AUTO}
+    show-sql: true
+  security:
+    ignored:
+      oauth2:
+        client:
+          registration:
+            google:
+              clientId: "${GOOGLE_CLIENT_ID}"
+              clientSecret: "${GOOGLE_CLIENT_SECRET}"
+              callbackUrl: http://localhost:5000/login/oauth2/code/google
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+app:
+  security:
+    enabled: false
+  frontend:
+    url: http://localhost:5000
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: "${GOOGLE_CLIENT_ID}"
+            clientSecret: "${GOOGLE_CLIENT_SECRET}"
+            callbackUrl: http://localhost:5000/login/oauth2/code/google
+app:
+  security:
+    enabled: true
+  frontend:
+    url: http://localhost:5000
