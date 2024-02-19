@@ -135,6 +135,16 @@ services:
     networks:
       - ph-net
 
+  ui:
+    build:
+      context: ./programmed-household-ui
+      dockerfile: Dockerfile
+    container_name: ui
+    ports:
+      - "7000:7000"
+    networks:
+      - ph-net
+
 volumes:
   mysql-data: {}
   data01:
