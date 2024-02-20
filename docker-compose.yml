@@ -29,7 +29,7 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "9200:9200"
     healthcheck:
       test: curl -s http://es01:9200 >/dev/null || exit 1
       interval: 30s
@@ -58,7 +58,7 @@ services:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200"]'
     ports:
-      - 5601:5601
+      - "5601:5601"
     depends_on:
       - es01
       - es02
@@ -109,6 +109,11 @@ services:
         condition: service_healthy
       elasticsearch:
         condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-sSf", "http://coreservice:5000/api/v1/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - ph-net
 
@@ -135,6 +140,22 @@ services:
     networks:
       - ph-net
 
+<<<<<<< Updated upstream
+=======
+  ui:
+    build:
+      context: ./programmed-household-ui
+      dockerfile: Dockerfile
+    container_name: ui
+    ports:
+      - "7000:7000"
+    depends_on:
+      coreservice:
+        condition: service_healthy
+    networks:
+      - ph-net
+
+>>>>>>> Stashed changes
 volumes:
   mysql-data: {}
   data01:
