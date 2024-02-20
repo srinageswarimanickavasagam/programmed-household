@@ -28,6 +28,11 @@ public class RecipeController {
 
   private final IRecipeService recipeService;
 
+  @GetMapping("/health")
+  public String healthCheck() {
+    return "UP";
+  }
+
   /**
    * Fetches recipe by id
    *
@@ -49,7 +54,10 @@ public class RecipeController {
    */
   @GetMapping("/recipes")
   public ResponseEntity<APIResponseDTO<Page<RecipeResponseDTO>>> findAll(
-      @RequestBody SearchRequestDTO request) {
+      @RequestBody(required = false) SearchRequestDTO request) {
+    if (request == null) {
+      request = new SearchRequestDTO(); // Set default value
+    }
     final Page<RecipeResponseDTO> response = recipeService.findAll(request);
     return ResponseEntity.ok(
         new APIResponseDTO<>(

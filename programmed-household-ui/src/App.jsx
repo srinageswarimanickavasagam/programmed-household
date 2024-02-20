@@ -1,10 +1,10 @@
 import "./App.css";
-import ListCategories from "./components/ListCategories";
+import CheckBackend from "./components/CheckBackend.jsx";
 
 function App() {
   return (
     <>
-      <ListCategories />
+      <CheckBackend />
     </>
   );
 }
