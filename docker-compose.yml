@@ -140,8 +140,6 @@ services:
     networks:
       - ph-net
 
-<<<<<<< Updated upstream
-=======
   ui:
     build:
       context: ./programmed-household-ui
@@ -155,7 +153,6 @@ services:
     networks:
       - ph-net
 
->>>>>>> Stashed changes
 volumes:
   mysql-data: {}
   data01:
