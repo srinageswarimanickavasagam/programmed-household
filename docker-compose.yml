@@ -4,14 +4,14 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
     container_name: es-base
     environment:
-      - node.name=es-base
-      - cluster.name=es-docker-cluster
-      - bootstrap.memory_lock=true
+      - "node.name=es-base"
+      - "cluster.name=es-docker-cluster"
+      - "bootstrap.memory_lock=true"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
-      - xpack.security.enrollment.enabled=false
-      - discovery.seed_hosts=es-base
-      - cluster.initial_master_nodes=es-base
+      - "xpack.security.enabled=false"
+      - "xpack.security.enrollment.enabled=false"
+      - "discovery.seed_hosts=es01,es02"
+      - "cluster.initial_master_nodes=es01,es02"
     ulimits:
       memlock:
         soft: -1
@@ -24,14 +24,14 @@ services:
       service: es-base
     container_name: es01
     environment:
-      - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=es01,es02
+      - "discovery.seed_hosts=es02"
+      - "cluster.initial_master_nodes=es01,es02"
     volumes:
       - data01:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
     healthcheck:
-      test: curl -s http://es01:9200 >/dev/null || exit 1
+      test: curl -s http://localhost:9200 >/dev/null || exit 1
       interval: 30s
       timeout: 10s
       retries: 50
@@ -41,12 +41,12 @@ services:
       service: es-base
     container_name: es02
     environment:
-      - discovery.seed_hosts=es01
-      - cluster.initial_master_nodes=es01,es02
+      - "discovery.seed_hosts=es01"
+      - "cluster.initial_master_nodes=es01,es02"
     volumes:
       - data02:/usr/share/elasticsearch/data
     healthcheck:
-      test: curl -s http://es02:9200 >/dev/null || exit 1
+      test: curl -s http://localhost:9200 >/dev/null || exit 1
       interval: 30s
       timeout: 10s
       retries: 50
@@ -107,8 +107,6 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
-      elasticsearch:
-        condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-sSf", "http://coreservice:5000/api/v1/health" ]
       interval: 30s
@@ -140,13 +138,14 @@ services:
     networks:
       - ph-net
 
-  ui:
+  ui-nginx-server:
+    container_name: ui-nginx-server
     build:
       context: ./programmed-household-ui
       dockerfile: Dockerfile
-    container_name: ui
+      target: ph-nginx-img
     ports:
-      - "7000:7000"
+      - "8080:80"
     depends_on:
       coreservice:
         condition: service_healthy
