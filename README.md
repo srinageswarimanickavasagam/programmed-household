@@ -115,8 +115,3 @@ Below are the key tables and their relationships in the database.
     - Connection 2: `item_id` links to the item.
 
 These relationships help me organize recipes into categories, associate recipes with specific items, and schedule cooking sessions. They also facilitate the categorization of items and the management of inventory.
-
-# Packaging react and spring together
-## Refer 
-- https://www.youtube.com/playlist?list=PL2OrQJM8zmZ2-O_rM2Ju9zYMbY8Ta-8I4
-- https://www.youtube.com/playlist?list=PLKRWHMZ_QGZCPTl4okc5dSu6jreyL4y-T
