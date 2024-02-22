@@ -1,11 +1,14 @@
-FROM node:18.18.0
-WORKDIR /usr/programmed-household-ui
-ENV PATH /programmed-household-ui/node_modules/.bin:$PATH
-COPY ./package.json ./
+# Stage 1: Build the React app
+FROM node:18.18.0 AS build
+WORKDIR /usr/src/app
+COPY package*.json ./
 RUN npm install
-COPY ./ ./
-CMD ["npm", "run","dev"]
+COPY . .
+RUN npm run build
 
-# Image name as programmed-household-ui
-# Build command: docker build -t programmed-household-ui .
-# Run command: docker run -p 80:80 programmed-household-ui
+# Stage 2: Serve the React app using Nginx
+FROM nginx:latest AS ph-nginx-img
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+COPY default.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

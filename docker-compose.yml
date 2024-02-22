@@ -1,35 +1,27 @@
 version: '3.9'
 services:
-  es-base:
+  es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
-    container_name: es-base
+    container_name: es01
     environment:
-      - node.name=es-base
+      - node.name=es01
       - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
-      - discovery.seed_hosts=es-base
-      - cluster.initial_master_nodes=es-base
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    networks:
-      - ph-net
-
-  es01:
-    extends:
-      service: es-base
-    container_name: es01
-    environment:
-      - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=es01,es02
     volumes:
       - data01:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - 9200:9200
+    networks:
+      - ph-net
     healthcheck:
       test: curl -s http://es01:9200 >/dev/null || exit 1
       interval: 30s
@@ -37,28 +29,39 @@ services:
       retries: 50
 
   es02:
-    extends:
-      service: es-base
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4
     container_name: es02
     environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01,es02
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - data02:/usr/share/elasticsearch/data
+    networks:
+      - ph-net
     healthcheck:
       test: curl -s http://es02:9200 >/dev/null || exit 1
       interval: 30s
       timeout: 10s
       retries: 50
 
-  kibana:
+  kib01:
     image: docker.elastic.co/kibana/kibana:8.11.4
-    container_name: kibana
+    container_name: kib01
+    ports:
+      - 5601:5601
     environment:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200"]'
-    ports:
-      - "5601:5601"
     depends_on:
       - es01
       - es02
@@ -107,8 +110,6 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
-      elasticsearch:
-        condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-sSf", "http://coreservice:5000/api/v1/health" ]
       interval: 30s
@@ -140,13 +141,14 @@ services:
     networks:
       - ph-net
 
-  ui:
+  ui-nginx-server:
+    container_name: ui-nginx-server
     build:
       context: ./programmed-household-ui
       dockerfile: Dockerfile
-    container_name: ui
+      target: ph-nginx-img
     ports:
-      - "7000:7000"
+      - "8080:80"
     depends_on:
       coreservice:
         condition: service_healthy
