@@ -8,7 +8,7 @@ const CheckBackend = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/v1/recipes", {
+        const response = await fetch("/api/v1/recipes", {
           method: "GET", // Use GET method
           headers: {
             "Content-Type": "application/json", // No need to set Content-Type for GET requests
