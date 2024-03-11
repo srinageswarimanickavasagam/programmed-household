@@ -115,3 +115,6 @@ Below are the key tables and their relationships in the database.
     - Connection 2: `item_id` links to the item.
 
 These relationships help me organize recipes into categories, associate recipes with specific items, and schedule cooking sessions. They also facilitate the categorization of items and the management of inventory.
+
+Deployment Reference:
+- https://www.youtube.com/playlist?list=PLLMxXO6kMiNjWJwXyUkuMAeygt_PvwKbF
